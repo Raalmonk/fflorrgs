@@ -192,6 +192,8 @@ class Fight(warcraftlogs_base.BaseModel):
             spec_data = composition_data.specs[0]
             spec_name = spec_data.spec
             class_name = composition_data.type
+            if spec_name.lower() in("dps","healer","tank"):
+                spec_name = class_name
             spec = WowSpec.get(name_slug_cap=spec_name, wow_class__name_slug_cap=class_name)
             if not spec:
                 logger.warning("Unknown Spec: %s", spec_name)
