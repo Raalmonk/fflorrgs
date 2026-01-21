@@ -12,7 +12,7 @@ class TestSpecRanking(unittest.TestCase):
 
 
     def setUp(self) -> None:
-        self.spec_ranking = SpecRanking()
+        self.spec_ranking = SpecRanking(spec_slug="test_spec", boss_slug="test_boss", metric="metric")
 
         self.boss_patch = mock.patch("lorgs.models.raid_boss.RaidBoss.get")
         self.boss_mock = self.boss_patch.start()
@@ -38,6 +38,7 @@ class TestSpecRanking(unittest.TestCase):
         assert 'className: "ClassName"' in query
         assert 'specName: "SpecName"' in query
         assert 'metric: metric' in query
+        assert 'difficulty: 101' in query
 
     def test__process_query_result_one(self):
 
@@ -48,6 +49,8 @@ class TestSpecRanking(unittest.TestCase):
                         "rankings": [
                             {
                                 "name": "PlayerName",
+                                "class": "ClassName",
+                                "spec": "SpecName",
 							    "amount": 123456,
 							    "duration": 5432,
 							    "startTime": 1634544096374,
@@ -64,18 +67,18 @@ class TestSpecRanking(unittest.TestCase):
                 }
             }
         }
-        self.spec_ranking.process_query_result(data)
+        self.spec_ranking.process_query_result(**data)
 
         assert len(self.spec_ranking.reports) == 1
 
         report = self.spec_ranking.reports[0]
         assert report.report_id == "REPORT_CODE"
 
-        fight = report.fights["5"]
+        fight = report.fights[0]
         assert fight.fight_id == 5
         assert fight.duration == 5432
 
-        player = fight.players["-1"]
+        player = fight.players[0]
         assert player.name == "PlayerName"
         assert player.total == 123456
         assert player.casts == []
@@ -83,8 +86,8 @@ class TestSpecRanking(unittest.TestCase):
     def test__process_query_result_fixture(self):
 
         data = load_fixture("spec_rankings_1.json")
-        data = data.get("data")
+        # data = data.get("data")
 
-        self.spec_ranking.process_query_result(data)
+        self.spec_ranking.process_query_result(**data)
 
         assert len(self.spec_ranking.reports) == 10
