@@ -1,47 +1,52 @@
-# lorrgs_api/routes/api_fight_analysis.py
-from flask import Blueprint, jsonify, request
+"""API Routes for detailed Fight Analysis."""
+from __future__ import annotations
+
+# IMPORT THIRD PARTY LIBRARIES
+import fastapi
+
+# IMPORT LOCAL LIBRARIES
 from lorgs.models.warcraftlogs_report import Report
 
-api = Blueprint("api_fight_analysis", __name__)
+router = fastapi.APIRouter()
 
-@api.route("/fight_analysis/<string:report_id>/<int:fight_id>")
-async def get_fight_analysis(report_id, fight_id):
-    """获取指定战斗的详细施法时间轴数据"""
+@router.get("/fight_analysis/{report_id}/{fight_id}")
+async def get_fight_analysis(report_id: str, fight_id: int, spec: str | None = None):
+    """获取指定战斗的详细施法时间轴数据。
     
-    # 1. 获取可选的过滤参数 (比如只看特定职业)
-    # 用法: /api/fight_analysis/xyz/5?spec=Pictomancer
-    target_spec = request.args.get("spec") 
-
-    # 2. 初始化报告
+    Args:
+        report_id (str): WCL/FFLogs 报告 ID
+        fight_id (int): 战斗 ID
+        spec (str, optional): 职业过滤 (例如 "Pictomancer" 或 "redmage-redmage")
+    """
+    
+    # 1. 初始化并加载报告元数据
     report = Report(report_id=report_id)
-    await report.load() # 加载元数据
+    # 加载 Report MasterData (战斗列表等)
+    await report.load()
     
-    # 3. 获取战斗
+    # 2. 获取特定战斗
     fight = report.get_fight(fight_id=fight_id)
     if not fight:
-        return jsonify({"error": "Fight not found"}), 404
+        return fastapi.Response(content="Fight not found", status_code=404)
         
-    # 4. 加载玩家列表 (Summary)
-    await fight.load() 
+    # 3. 加载战斗摘要 (获取玩家列表)
+    await fight.load()
     
-    # 5. 确定要加载哪些玩家
-    # 如果指定了 spec 参数，就只加载那个职业，否则加载所有玩家(可能会慢)
+    # 4. 确定要加载哪些玩家
     players_to_load = fight.players
-    if target_spec:
-        players_to_load = [p for p in fight.players if p.spec_slug == target_spec]
+    if spec:
+        players_to_load = [p for p in fight.players if p.spec_slug == spec]
         
     if not players_to_load:
-        return jsonify({"error": f"No players found for spec: {target_spec}"}), 404
+        return fastapi.Response(content=f"No players found for spec: {spec}", status_code=404)
 
-    # 6. 并行加载选定玩家的施法数据
-    # 这里利用了 fight.load_many 或直接遍历 load (lorgs 的设计支持 await 列表)
+    # 5. 并行加载选定玩家的施法数据
+    # 只有当 casts 为空时才去加载，避免重复
     for player in players_to_load:
-        # 只有当 casts 为空时才去加载，避免重复
         if not player.casts:
             await player.load()
 
-    # 7. 返回数据
+    # 6. 返回数据
     # 利用 fight.as_dict()，它会自动包含 players 和里面的 casts
-    # 我们只返回加载了数据的玩家 ID
     loaded_player_ids = [p.source_id for p in players_to_load]
-    return jsonify(fight.as_dict(player_ids=loaded_player_ids))
+    return fight.as_dict(player_ids=loaded_player_ids)
