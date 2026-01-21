@@ -14,7 +14,7 @@ from test import helpers
 
 # Test Classes
 # todo: move somewhere else or mock away
-MOCK_ROLE = wow_role.WowRole(id=4, name="Test")
+MOCK_ROLE = wow_role.WowRole(id=4, name="Test", code="test")
 MOCK_CLASS = wow_class.WowClass(id=4, name="Test")
 MOCK_SPEC = wow_spec.WowSpec(name="TestSpec", wow_class=MOCK_CLASS, role=MOCK_ROLE)
 
