@@ -22,6 +22,19 @@ VAMP_FATALE.add_cast(
     desc="Buster AoE on both tanks"
 )
 
+
+def load_top_ranks():
+    """Fetch Top 5 RDM parses for M9S.
+
+    This replaces the static timeline with real data from FFLogs.
+    """
+    import subprocess
+    import sys
+
+    cmd = [sys.executable, "scripts/fetch_top_ranks.py", "--boss", "vamp-fatale", "--spec", "red-mage-red-mage"]
+    print(f"Running: {' '.join(cmd)}")
+    subprocess.run(cmd, check=True)
+
 VAMP_FATALE.add_cast(
     spell_id="M9S_VAMP_STOMP_1",
     name="Vamp Stomp",
