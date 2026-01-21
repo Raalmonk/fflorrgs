@@ -108,6 +108,11 @@ class BaseActor(warcraftlogs_base.BaseModel):
         if not sub_query:
             # eg.: a boss in `query_mode.phases` but with not phase-triggers
             return
+        
+        # 打印调试信息
+        print(f"\n[DEBUG] Querying Actor: {getattr(self, 'name', 'Unknown')}")
+        print(f"[DEBUG] Time: {self.fight.start_time_rel} - {self.fight.end_time_rel}")
+        print(f"[DEBUG] Filter: {sub_query}")
 
         return textwrap.dedent(
             f"""\
@@ -115,8 +120,12 @@ class BaseActor(warcraftlogs_base.BaseModel):
             {{
                 report(code: "{self.fight.report.report_id}")
                 {{
-                    events({self.fight.table_query_args}, filterExpression: "{sub_query}")
-                        {{data}}
+                    events(
+                        startTime: {self.fight.start_time_rel},
+                        endTime: {self.fight.end_time_rel},
+                        filterExpression: "{sub_query}"
+                    )
+                    {{data}}
                 }}
             }}
         """

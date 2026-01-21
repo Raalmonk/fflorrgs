@@ -217,7 +217,7 @@ def build_spell_query(*spells: WowSpell) -> str:
 
     for spell in spells_with_extra_filter:
         for event_type in spell.event_types:
-            event_query = f"type='{spell.event_type}' and ability.id = {spell.spell_id} and {spell.extra_filter}"
+            event_query = f"type='{spell.event_type}' and ability.gameID = {spell.spell_id} and {spell.extra_filter}"
             event_query = f"({event_query})"
             queries.append(event_query)
 
@@ -229,7 +229,10 @@ def build_spell_query(*spells: WowSpell) -> str:
 
     for event_type, event_spells in spells_by_type.items():
         spell_ids = WowSpell.spell_ids_str(event_spells)
-        event_query = f"type='{event_type}' and ability.id in ({spell_ids})"
+        if event_type == "cast":
+            event_query = f"type='{event_type}'" 
+        else:
+            event_query = f"type='{event_type}' and ability.gameID in ({spell_ids})"
         event_query = f"({event_query})"
 
         queries.append(event_query)

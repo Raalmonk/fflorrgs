@@ -33,7 +33,7 @@ class WarcraftReport(pydantic.BaseModel):
 
         query_params = parse_qs(urlparse(url).query)
         fight_ids = [int(v) for v in query_params.get("fight", [-1])]
-        player_ids = [int(v) for v in query_params.get("source", [-1])]
+        player_ids = [int(v) for v in query_params.get("source", [])]
 
         return cls(
             report_id=report_id,
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     parser.add_argument("url", nargs="?", type=str, help="Full Warcraft Logs report URL")
     parser.add_argument("--report", type=str, help="Report ID")
     parser.add_argument("--fight", type=int, nargs="+", help="Fight IDs", default=[-1])
-    parser.add_argument("--source", type=int, nargs="+", help="Source (Player) IDs", default=[-1])
+    parser.add_argument("--source", type=int, nargs="+", help="Source (Player) IDs", default=[])
 
     args = parser.parse_args()
 
