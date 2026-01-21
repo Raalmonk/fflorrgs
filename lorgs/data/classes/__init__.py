@@ -32,21 +32,6 @@ from lorgs.data.classes.redmage import *
 from lorgs.data.classes.blackmage import *
 from lorgs.data.classes.pictomancer import *
 
-# Comment out WoW classes for now
-# from lorgs.data.classes.deathknight import *
-# from lorgs.data.classes.demonhunter import *
-# from lorgs.data.classes.druid import *
-# from lorgs.data.classes.evoker import *
-# from lorgs.data.classes.hunter import *
-# from lorgs.data.classes.mage import *
-# from lorgs.data.classes.wow_monk import *
-# from lorgs.data.classes.other import *
-# from lorgs.data.classes.wow_paladin import *
-# from lorgs.data.classes.priest import *
-# from lorgs.data.classes.rogue import *
-# from lorgs.data.classes.shaman import *
-# from lorgs.data.classes.warlock import *
-# from lorgs.data.classes.wow_warrior import *
 
 
 # a few collections used to assign trinkets and consumables
