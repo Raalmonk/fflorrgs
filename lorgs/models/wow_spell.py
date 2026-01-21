@@ -60,6 +60,12 @@ class SpellTag:
     MOVE = "move"
     """Tag for Movement Cooldowns. Roar, Windrush, Time Spiral, etc"""
 
+    SINGLE_MIT = "SINGLE_MIT"
+    """Tag for Single Target Mitigation."""
+
+    RAID_MIT = "RAID_MIT"
+    """Tag for Raid Wide Mitigation."""
+
 
 class WowSpell(base.MemoryModel):
     """Container to define a spell."""
