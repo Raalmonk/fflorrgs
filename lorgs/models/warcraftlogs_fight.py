@@ -47,6 +47,8 @@ class Fight(warcraftlogs_base.BaseModel):
 
     deaths: int = 0
     damage_taken: int = 0
+    damage_done: int = 0
+    combatant_info: list = []
 
     percent: float = 0
     """boss percentage at the end of the fight."""
@@ -183,6 +185,9 @@ class Fight(warcraftlogs_base.BaseModel):
         total_damage = summary_data.damageDone
         total_healing = summary_data.healingDone
 
+        self.damage_done = sum(d.total for d in total_damage)
+        self.combatant_info = []
+
         for composition_data in summary_data.composition:
             # Get Class and Spec
             if not composition_data.specs:
@@ -198,6 +203,8 @@ class Fight(warcraftlogs_base.BaseModel):
             if not spec:
                 logger.warning("Unknown Spec: %s", spec_name)
                 continue
+
+            self.combatant_info.append(spec.full_name_slug)
 
             # Get Total Damage or Healing
             total_data = total_healing if spec.role.code == "heal" else total_damage
