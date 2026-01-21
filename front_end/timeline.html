@@ -211,8 +211,8 @@
                     const mechs = await fetchBossMechanics();
 
                     // 2. 加载真实战斗 (使用测试 ID)
-                    // Report: aeda436cdee27320ae6043a8e34cd358801112fa, Fight: 1
-                    const ranks = await fetchFightData('aeda436cdee27320ae6043a8e34cd358801112fa', 1);
+                    // Report: vyHg3TtcKp614LkD, Fight: 33
+                    const ranks = await fetchFightData('vyHg3TtcKp614LkD', 33);
 
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
                     setSelectedSpells(new Set(Object.values(sps).map(s => s.id)));
