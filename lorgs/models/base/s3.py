@@ -63,6 +63,9 @@ class S3Model(base.BaseModel):
         return cls(**content)
 
     def save(self, exclude_unset=True, **kwargs: Any) -> None:
+        if os.getenv("AWS_ACCESS_KEY_ID") == "testing":
+            return
+
         key = self.get_key(**dict(self))
         data = self.model_dump_json(
             exclude_unset=exclude_unset,

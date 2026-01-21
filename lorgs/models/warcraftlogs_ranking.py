@@ -23,9 +23,12 @@ from lorgs.models.wow_spec import WowSpec
 
 # Map Difficulty Names to Integers used in WCL
 DIFFICULTY_IDS = {
-    "normal": 3,
-    "heroic": 4,
-    "mythic": 5,
+    "normal": 100,
+    "heroic": 101,  # savage
+    "mythic": 101,  # savage
+    "savage": 101,
+    "extreme": 102,
+    "ultimate": 103,
 }
 
 
@@ -87,7 +90,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     #
     def get_query(self) -> str:
         """Return the Query to load the rankings for this Spec & Boss."""
-        difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 5
+        difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
 
         return textwrap.dedent(
             f"""\
