@@ -79,21 +79,34 @@
 
         // 1. fetchSpellData (API)
         const fetchSpellData = async (specSlug = 'redmage-redmage') => {
-            // 接口：/api/specs/{spec_slug}/spells
             const res = await fetch(`http://127.0.0.1:5000/api/specs/${specSlug}/spells`);
             const data = await res.json();
 
-            // 数据清洗：把后端的 snake_case 转成前端需要的格式
+            // Helper to map Backend Tags -> Frontend Categories
+            const resolveCategory = (tags) => {
+                if (!tags || tags.length === 0) return 'MAJOR';
+                const tagSet = new Set(tags.map(t => t.toLowerCase()));
+
+                if (tagSet.has('raid_mit') || tagSet.has('raid_cd')) return 'RAID_MIT';
+                if (tagSet.has('single_mit') || tagSet.has('tank_mit')) return 'SINGLE_MIT';
+                if (tagSet.has('utility') || tagSet.has('potion')) return 'UTILITY';
+                return 'MAJOR';
+            };
+
             const spellMap = {};
             Object.values(data).forEach(spell => {
                 spellMap[spell.spell_id] = {
-                    id: spell.spell_id,      // 注意：后端是 int
+                    id: spell.spell_id,
                     name: spell.name,
-                    image: 'http://127.0.0.1:5000/lorrgs_assets/images/spells/' + spell.icon,
+                    image: spell.icon.startsWith('http') ? spell.icon : 'http://127.0.0.1:5000/lorrgs_assets/images/spells/' + spell.icon,
+
+                    // Fix: Actually read cooldown/duration from API
                     cd: spell.cooldown || 0,
                     duration: spell.duration || 0,
                     color: spell.color || '#ffcc00',
-                    category: 'MAJOR' // 暂时默认，后面再优化
+
+                    // Fix: Dynamic Category
+                    category: resolveCategory(spell.tags)
                 };
             });
             return spellMap;

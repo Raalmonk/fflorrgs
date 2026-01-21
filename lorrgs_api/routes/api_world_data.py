@@ -81,7 +81,7 @@ async def get_spec_spells(spec_slug: str) -> dict[int, WowSpell]:
         raise fastapi.HTTPException(status_code=404, detail="Invalid Spec.")
 
     abilities = spec.all_spells + spec.all_buffs + spec.all_debuffs + spec.all_events
-    return {spell.spell_id: spell for spell in abilities}
+    return {spell.spell_id: spell.as_dict() for spell in abilities}
 
 
 ###############################################################################

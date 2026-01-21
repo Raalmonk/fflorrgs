@@ -1,1 +1,1 @@
-from lorgs.data.items.potions import *
+from .potions import *
