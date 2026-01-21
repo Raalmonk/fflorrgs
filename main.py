@@ -1,7 +1,6 @@
 # main.py
 import uvicorn
 import os
-from lorrgs_api.app import create_app  #
 
 # 1. 将环境变量设置移至全局作用域
 # 这样可以确保 uvicorn 在 reload 重新加载模块时，这些变量依然生效，
@@ -13,6 +12,8 @@ os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
 # WCL 客户端 ID 和 Secret
 os.environ["WCL_CLIENT_ID"] = "a0e16bba-fba8-432d-a317-4a6a83d98728"
 os.environ["WCL_CLIENT_SECRET"] = "Rowpl4stVguifS4YJbzow1HCjh1g2uNuGNaFYRPk"
+
+from lorrgs_api.app import create_app  #
 
 # 2. 在这里显式调用工厂函数创建 app 实例
 # 这解决了 'Attribute "app" not found' 的错误，因为现在 main 模块里确实有一个全局的 app 变量了。
