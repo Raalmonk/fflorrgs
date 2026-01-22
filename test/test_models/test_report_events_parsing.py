@@ -1,13 +1,13 @@
 import pytest
 from lorgs.clients.wcl.models.report_events import ReportEvent
 
-def test_report_event_parsing_with_abilityID():
+def test_report_event_parsing_with_abilityGameID():
     data = {
         "timestamp": 123456,
         "type": "cast",
         "sourceID": 1,
         "targetID": 2,
-        "abilityID": 100,
+        "abilityGameID": 100,
         "fight": 1
     }
     event = ReportEvent(**data)

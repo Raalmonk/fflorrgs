@@ -15,6 +15,6 @@ class ReportEvent(BaseModel):
 
     targetID: int = 0
 
-    abilityGameID: int = Field(0, alias="abilityID")
+    abilityGameID: int = Field(0)
 
     fight: int = 0
