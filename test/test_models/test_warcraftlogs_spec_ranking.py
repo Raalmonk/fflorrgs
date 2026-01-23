@@ -8,7 +8,7 @@ from lorgs.models.warcraftlogs_ranking import SpecRanking
 from ..helpers import load_fixture
 
 
-class TestSpecRanking(unittest.TestCase):
+class TestSpecRanking(unittest.IsolatedAsyncioTestCase):
 
 
     def setUp(self) -> None:
@@ -39,9 +39,50 @@ class TestSpecRanking(unittest.TestCase):
         assert 'specName: "SpecName"' in query
         assert 'metric: metric' in query
         assert 'difficulty: 101' in query
-        # check if cn alias is present (ignoring whitespace)
-        assert 'cn:' in query
+        assert 'cn:' not in query
+        assert 'serverRegion: "CN"' not in query
+
+    def test__get_query_cn(self):
+        query = self.spec_ranking.get_query(region="CN")
         assert 'serverRegion: "CN"' in query
+        assert 'cn:' not in query
+
+    @mock.patch("lorgs.models.warcraftlogs_ranking.SpecRanking.process_query_result")
+    async def test__load_rankings(self, mock_process):
+        # mock client
+        client_mock = mock.AsyncMock()
+        client_mock.query.return_value = {
+            "worldData": {
+                "encounter": {
+                    "characterRankings": "DATA"
+                }
+            }
+        }
+
+        with mock.patch("lorgs.clients.wcl.WarcraftlogsClient.get_instance", return_value=client_mock):
+             await self.spec_ranking.load_rankings()
+
+        # check calls
+        assert client_mock.query.call_count == 2
+
+        # Check args
+        calls = client_mock.query.call_args_list
+        # call 1: Global
+        assert "serverRegion" not in calls[0][0][0] # query string
+        assert "region" not in calls[0].kwargs
+
+        # call 2: CN
+        assert "serverRegion" in calls[1][0][0] # query string
+        assert calls[1].kwargs.get("region") == "CN"
+
+        # Check Merge
+        mock_process.assert_called_once()
+        call_args = mock_process.call_args
+
+        # we expect the result to have "cn": "DATA" merged in
+        result = call_args.kwargs
+        cn_data = result["worldData"]["encounter"]["cn"]
+        assert cn_data == "DATA"
 
     def test__process_query_result_one(self):
 
