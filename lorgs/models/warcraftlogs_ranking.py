@@ -111,7 +111,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             encounter(id: {self.boss.id})
             {{
                 {build_rankings_query()}
-                cn: {build_rankings_query('serverRegion: "CN"')}
+                cn: {build_rankings_query('region: 4, partition: 2')}
             }}
         }}
         """
@@ -168,6 +168,9 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
                 spec = WowSpec.get(name_slug_cap=spec_name, wow_class__name_slug_cap=class_name)
                 if not spec:
+                    continue
+
+                if spec.role.code != self.spec.role.code:
                     continue
 
                 p = Player(
