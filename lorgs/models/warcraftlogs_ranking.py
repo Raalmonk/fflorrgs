@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 # IMPORT STANDARD LIBRARIES
+import asyncio
 import datetime
 import textwrap
 import typing
@@ -88,12 +89,20 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     ############################################################################
     # Query: Rankings
     #
-    def get_query(self) -> str:
+    def get_query(self, region: str = "") -> str:
         """Return the Query to load the rankings for this Spec & Boss."""
         difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
 
-        def build_rankings_query(args=""):
-            return f"""
+        args = ""
+        if region == "CN":
+            args = 'serverRegion: "CN"'
+
+        return textwrap.dedent(
+            f"""\
+        worldData
+        {{
+            encounter(id: {self.boss.id})
+            {{
                 characterRankings(
                     className: "{self.spec.wow_class.name_slug_cap}"
                     specName: "{self.spec.name_slug_cap}"
@@ -102,16 +111,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                     includeCombatantInfo: true
                     {args}
                 )
-            """
-
-        return textwrap.dedent(
-            f"""\
-        worldData
-        {{
-            encounter(id: {self.boss.id})
-            {{
-                {build_rankings_query()}
-                cn: {build_rankings_query('serverRegion: "CN"')}
             }}
         }}
         """
@@ -228,9 +227,31 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     async def load_rankings(self) -> None:
         """Fetch the current Ranking Data"""
         # Build and run the query
-        query = self.get_query()
-        query_result = await self.client.query(query)
-        self.process_query_result(**query_result)
+        query_global = self.get_query()
+        query_cn = self.get_query(region="CN")
+
+        # Run both queries
+        task_global = self.client.query(query_global)
+        task_cn = self.client.query(query_cn, region="CN")
+
+        result_global, result_cn = await asyncio.gather(task_global, task_cn)
+
+        # Merge Results
+        # we basically copy the CN-Rankings into the Global-Result-Dict
+        # to match the structure expected by `process_query_result`
+        world_data = result_cn.get("worldData") or {}
+        encounter = world_data.get("encounter") or {}
+        cn_rankings = encounter.get("characterRankings") or {}
+
+        # Ensure the path exists in result_global
+        if not result_global.get("worldData"):
+            result_global["worldData"] = {}
+        if not result_global["worldData"].get("encounter"):
+            result_global["worldData"]["encounter"] = {}
+
+        result_global["worldData"]["encounter"]["cn"] = cn_rankings
+
+        self.process_query_result(**result_global)
 
     ############################################################################
     # Query: Fights
