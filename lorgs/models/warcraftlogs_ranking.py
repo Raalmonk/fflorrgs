@@ -111,7 +111,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             encounter(id: {self.boss.id})
             {{
                 {build_rankings_query()}
-                cn: {build_rankings_query('region: 4, partition: 2')}
+                cn: {build_rankings_query('serverRegion: "CN"')}
             }}
         }}
         """
