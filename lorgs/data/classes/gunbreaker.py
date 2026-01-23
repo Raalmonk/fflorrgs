@@ -30,17 +30,17 @@ GUNBREAKER_MAIN = WowSpec(role=TANK, wow_class=GUNBREAKER, name="Gunbreaker")
 #
 
 # Burst / Cooldowns
-GUNBREAKER_MAIN.add_spell(spell_id=16138, cooldown=60, name="No Mercy", icon="No_Mercy.png", tags=[SpellTag.DAMAGE])
+GUNBREAKER_MAIN.add_spell(spell_id=16138, cooldown=60, duration=20, name="No Mercy", icon="No_Mercy.png", tags=[SpellTag.DAMAGE])
 GUNBREAKER_MAIN.add_spell(spell_id=16164, cooldown=60, name="Bloodfest", icon="Bloodfest.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-GUNBREAKER_MAIN.add_spell(spell_id=36935, cooldown=120, name="Great Nebula", icon="Great_Nebula.png", tags=[SpellTag.DEFENSIVE])
-GUNBREAKER_MAIN.add_spell(spell_id=16140, cooldown=90, name="Camouflage", icon="Camouflage.png", tags=[SpellTag.DEFENSIVE])
-GUNBREAKER_MAIN.add_spell(spell_id=10, cooldown=90, name="Rampart", icon="Rampart.png", tags=[SpellTag.DEFENSIVE])
-GUNBREAKER_MAIN.add_spell(spell_id=25758, cooldown=25, name="Heart of Corundum", icon="Heart_of_Corundum.png", tags=[SpellTag.DEFENSIVE])
-GUNBREAKER_MAIN.add_spell(spell_id=16151, cooldown=60, name="Aurora", icon="Aurora.png", tags=[SpellTag.DEFENSIVE])
-GUNBREAKER_MAIN.add_spell(spell_id=16152, cooldown=360, name="Superbolide", icon="Superbolide.png", tags=[SpellTag.DEFENSIVE])
-GUNBREAKER_MAIN.add_spell(spell_id=3626, cooldown=60, name="Reprisal", icon="Reprisal.png", tags=[SpellTag.DEFENSIVE])
+GUNBREAKER_MAIN.add_spell(spell_id=36935, cooldown=120, duration=15, name="Great Nebula", icon="Great_Nebula.png", tags=[SpellTag.DEFENSIVE])
+GUNBREAKER_MAIN.add_spell(spell_id=16140, cooldown=90, duration=20, name="Camouflage", icon="Camouflage.png", tags=[SpellTag.DEFENSIVE])
+GUNBREAKER_MAIN.add_spell(spell_id=10, cooldown=90, duration=20, name="Rampart", icon="Rampart.png", tags=[SpellTag.DEFENSIVE])
+GUNBREAKER_MAIN.add_spell(spell_id=25758, cooldown=25, duration=8, name="Heart of Corundum", icon="Heart_of_Corundum.png", tags=[SpellTag.DEFENSIVE])
+GUNBREAKER_MAIN.add_spell(spell_id=16151, cooldown=60, duration=18, name="Aurora", icon="Aurora.png", tags=[SpellTag.DEFENSIVE])
+GUNBREAKER_MAIN.add_spell(spell_id=16152, cooldown=360, duration=10, name="Superbolide", icon="Superbolide.png", tags=[SpellTag.DEFENSIVE])
+GUNBREAKER_MAIN.add_spell(spell_id=3626, cooldown=60, duration=15, name="Reprisal", icon="Reprisal.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
-GUNBREAKER_MAIN.add_spell(spell_id=16160, cooldown=90, name="Heart of Light", icon="Heart_of_Light.png", tags=[SpellTag.RAID_CD])
+GUNBREAKER_MAIN.add_spell(spell_id=16160, cooldown=90, duration=15, name="Heart of Light", icon="Heart_of_Light.png", tags=[SpellTag.RAID_CD])

@@ -30,19 +30,19 @@ DARK_KNIGHT_MAIN = WowSpec(role=TANK, wow_class=DARK_KNIGHT, name="Dark Knight")
 #
 
 # Burst / Cooldowns
-DARK_KNIGHT_MAIN.add_spell(spell_id=3637, cooldown=60, name="Delirium", icon="Delirium.png", tags=[SpellTag.DAMAGE])
-DARK_KNIGHT_MAIN.add_spell(spell_id=16472, cooldown=120, name="Living Shadow", icon="Living_Shadow.png", tags=[SpellTag.DAMAGE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=3637, cooldown=60, duration=15, name="Delirium", icon="Delirium.png", tags=[SpellTag.DAMAGE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=16472, cooldown=120, duration=20, name="Living Shadow", icon="Living_Shadow.png", tags=[SpellTag.DAMAGE])
 DARK_KNIGHT_MAIN.add_spell(spell_id=25757, cooldown=60, name="Shadowbringer", icon="Shadowbringer.png", tags=[SpellTag.DAMAGE])
-DARK_KNIGHT_MAIN.add_spell(spell_id=3639, cooldown=90, name="Salted Earth", icon="Salted_Earth.png", tags=[SpellTag.DAMAGE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=3639, cooldown=90, duration=15, name="Salted Earth", icon="Salted_Earth.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-DARK_KNIGHT_MAIN.add_spell(spell_id=36927, cooldown=120, name="Shadowed Vigil", icon="Shadowed_Vigil.png", tags=[SpellTag.DEFENSIVE])
-DARK_KNIGHT_MAIN.add_spell(spell_id=3634, cooldown=60, name="Dark Mind", icon="Dark_Mind.png", tags=[SpellTag.DEFENSIVE])
-DARK_KNIGHT_MAIN.add_spell(spell_id=10, cooldown=90, name="Rampart", icon="Rampart.png", tags=[SpellTag.DEFENSIVE])
-DARK_KNIGHT_MAIN.add_spell(spell_id=7393, cooldown=15, name="The Blackest Night", icon="The_Blackest_Night.png", tags=[SpellTag.DEFENSIVE])
-DARK_KNIGHT_MAIN.add_spell(spell_id=25754, cooldown=60, name="Oblation", icon="Oblation.png", tags=[SpellTag.DEFENSIVE])
-DARK_KNIGHT_MAIN.add_spell(spell_id=3638, cooldown=300, name="Living Dead", icon="Living_Dead.png", tags=[SpellTag.DEFENSIVE])
-DARK_KNIGHT_MAIN.add_spell(spell_id=3626, cooldown=60, name="Reprisal", icon="Reprisal.png", tags=[SpellTag.DEFENSIVE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=36927, cooldown=120, duration=15, name="Shadowed Vigil", icon="Shadowed_Vigil.png", tags=[SpellTag.DEFENSIVE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=3634, cooldown=60, duration=10, name="Dark Mind", icon="Dark_Mind.png", tags=[SpellTag.DEFENSIVE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=10, cooldown=90, duration=20, name="Rampart", icon="Rampart.png", tags=[SpellTag.DEFENSIVE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=7393, cooldown=15, duration=7, name="The Blackest Night", icon="The_Blackest_Night.png", tags=[SpellTag.DEFENSIVE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=25754, cooldown=60, duration=10, name="Oblation", icon="Oblation.png", tags=[SpellTag.DEFENSIVE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=3638, cooldown=300, duration=10, name="Living Dead", icon="Living_Dead.png", tags=[SpellTag.DEFENSIVE])
+DARK_KNIGHT_MAIN.add_spell(spell_id=3626, cooldown=60, duration=15, name="Reprisal", icon="Reprisal.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
-DARK_KNIGHT_MAIN.add_spell(spell_id=16471, cooldown=90, name="Dark Missionary", icon="Dark_Missionary.png", tags=[SpellTag.RAID_CD])
+DARK_KNIGHT_MAIN.add_spell(spell_id=16471, cooldown=90, duration=15, name="Dark Missionary", icon="Dark_Missionary.png", tags=[SpellTag.RAID_CD])

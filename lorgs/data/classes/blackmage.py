@@ -35,12 +35,12 @@ BLACK_MAGE_MAIN.add_spell(spell_id=162, cooldown=2.5, name="Flare", icon="Flare.
 BLACK_MAGE_MAIN.add_spell(spell_id=3003, cooldown=0, name="Flare Star", icon="Flare_Star.png", tags=[SpellTag.DAMAGE])
 BLACK_MAGE_MAIN.add_spell(spell_id=16507, cooldown=2.5, name="Xenoglossy", icon="Xenoglossy.png", tags=[SpellTag.DAMAGE])
 BLACK_MAGE_MAIN.add_spell(spell_id=7422, cooldown=2.5, name="Foul", icon="Foul.png", tags=[SpellTag.DAMAGE])
-BLACK_MAGE_MAIN.add_spell(spell_id=3573, cooldown=120, name="Ley Lines", icon="Ley_Lines.png", tags=[SpellTag.DAMAGE])
-BLACK_MAGE_MAIN.add_spell(spell_id=7421, cooldown=60, name="Triplecast", icon="Triplecast.png", tags=[SpellTag.DAMAGE])
-BLACK_MAGE_MAIN.add_spell(spell_id=150, cooldown=40, name="Swiftcast", icon="Swiftcast.png", tags=[SpellTag.DAMAGE])
+BLACK_MAGE_MAIN.add_spell(spell_id=3573, cooldown=120, duration=30, name="Ley Lines", icon="Ley_Lines.png", tags=[SpellTag.DAMAGE])
+BLACK_MAGE_MAIN.add_spell(spell_id=7421, cooldown=60, duration=15, name="Triplecast", icon="Triplecast.png", tags=[SpellTag.DAMAGE])
+BLACK_MAGE_MAIN.add_spell(spell_id=150, cooldown=40, duration=10, name="Swiftcast", icon="Swiftcast.png", tags=[SpellTag.DAMAGE])
 BLACK_MAGE_MAIN.add_spell(spell_id=158, cooldown=100, name="Manafont", icon="Manafont.png", tags=[SpellTag.DAMAGE])
 BLACK_MAGE_MAIN.add_spell(spell_id=4325, cooldown=0, name="Paradox", icon="Paradox.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-BLACK_MAGE_MAIN.add_spell(spell_id=157, cooldown=120, name="Manaward", icon="Manaward.png", tags=[SpellTag.DEFENSIVE])
-BLACK_MAGE_MAIN.add_spell(spell_id=7560, cooldown=90, name="Addle", icon="Addle.png", tags=[SpellTag.DEFENSIVE])
+BLACK_MAGE_MAIN.add_spell(spell_id=157, cooldown=120, duration=20, name="Manaward", icon="Manaward.png", tags=[SpellTag.DEFENSIVE])
+BLACK_MAGE_MAIN.add_spell(spell_id=7560, cooldown=90, duration=15, name="Addle", icon="Addle.png", tags=[SpellTag.DEFENSIVE])
