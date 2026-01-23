@@ -20,6 +20,7 @@ dotenv.load_dotenv()
 
 # IMPORT LOCAL LIBRARIES
 from lorgs import data  # load static data
+from lorgs.data.expansions.dawntrail import raids  # Load FFXIV Raids
 from lorgs.clients import wcl
 from lorgs.models.warcraftlogs_user_report import UserReport
 from lorgs.models.raid_boss import RaidBoss
@@ -38,6 +39,10 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
         logger.error(f"Spec not found: {spec_slug}")
         return
 
+    # Force DPS for Healers
+    if spec.role.code == "heal":
+        metric = "dps"
+
     # 2. Query Rankings
     client = wcl.WarcraftlogsClient.get_instance()
 
@@ -45,11 +50,8 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
     if difficulty == "heroic": difficulty_id = 4
     elif difficulty == "normal": difficulty_id = 3
 
-    query = f"""
-    worldData
-    {{
-        encounter(id: {boss.id})
-        {{
+    def build_rankings_query(args=""):
+        return f"""
             characterRankings(
                 className: "{spec.wow_class.name_slug_cap}"
                 specName: "{spec.name_slug_cap}"
@@ -57,17 +59,33 @@ async def fetch_top_ranks(boss_slug, spec_slug, limit=5, difficulty="mythic", me
                 difficulty: {difficulty_id}
                 includeCombatantInfo: true
                 page: 1
+                {args}
             )
+        """
+
+    query = f"""
+    worldData
+    {{
+        encounter(id: {boss.id})
+        {{
+            {build_rankings_query()}
+            cn: {build_rankings_query('serverRegion: "CN"')}
         }}
     }}
     """
 
     logger.info(f"Fetching top {limit} ranks for {boss.name} - {spec.name}...")
     result = await client.query(query)
-    rankings = result.get("worldData", {}).get("encounter", {}).get("characterRankings", {}).get("rankings", [])
+    encounter_data = result.get("worldData", {}).get("encounter", {})
 
-    # Slice to limit
-    rankings = rankings[:limit]
+    global_rankings = encounter_data.get("characterRankings", {}).get("rankings", [])
+    cn_rankings = encounter_data.get("cn", {}).get("rankings", [])
+
+    # Merge: Global (limit) + CN (10)
+    rankings = global_rankings[:limit] + cn_rankings[:10]
+
+    # Sort by DPS
+    rankings.sort(key=lambda x: x.get("amount", 0), reverse=True)
 
     for i, rank in enumerate(rankings):
         report_id = rank.get("report", {}).get("code")
