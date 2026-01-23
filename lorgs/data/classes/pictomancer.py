@@ -32,16 +32,16 @@ PICTOMANCER_MAIN = WowSpec(role=RDPS, wow_class=PICTOMANCER, name="Pictomancer")
 # Burst / Cooldowns
 PICTOMANCER_MAIN.add_spell(spell_id=34662, cooldown=2.5, name="Holy in White", icon="Holy_in_White.png", tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34663, cooldown=3.3, name="Comet in Black", icon="Comet_in_Black.png", tags=[SpellTag.DAMAGE])
-PICTOMANCER_MAIN.add_spell(spell_id=34683, cooldown=1, name="Subtractive Palette", icon="Subtractive_Palette.png", tags=[SpellTag.DAMAGE])
-PICTOMANCER_MAIN.add_spell(spell_id=34675, cooldown=120, name="Starry Muse", icon="Starry_Muse.png", tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34683, cooldown=1, duration=30, name="Subtractive Palette", icon="Subtractive_Palette.png", tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=34675, cooldown=120, duration=20, name="Starry Muse", icon="Starry_Muse.png", tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34674, cooldown=60, name="Striking Muse", icon="Striking_Muse.png", tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34677, cooldown=30, name="Retribution of the Madeen", icon="Retribution_of_the_Madeen.png", tags=[SpellTag.DAMAGE])
 PICTOMANCER_MAIN.add_spell(spell_id=34676, cooldown=30, name="Mog of the Ages", icon="Mog_of_the_Ages.png", tags=[SpellTag.DAMAGE])
-PICTOMANCER_MAIN.add_spell(spell_id=150, cooldown=40, name="Swiftcast", icon="Swiftcast.png", tags=[SpellTag.DAMAGE])
+PICTOMANCER_MAIN.add_spell(spell_id=150, cooldown=40, duration=10, name="Swiftcast", icon="Swiftcast.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-PICTOMANCER_MAIN.add_spell(spell_id=34685, cooldown=120, name="Tempera Coat", icon="Tempera_Coat.png", tags=[SpellTag.DEFENSIVE])
-PICTOMANCER_MAIN.add_spell(spell_id=7560, cooldown=90, name="Addle", icon="Addle.png", tags=[SpellTag.DEFENSIVE])
+PICTOMANCER_MAIN.add_spell(spell_id=34685, cooldown=120, duration=10, name="Tempera Coat", icon="Tempera_Coat.png", tags=[SpellTag.DEFENSIVE])
+PICTOMANCER_MAIN.add_spell(spell_id=7560, cooldown=90, duration=15, name="Addle", icon="Addle.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
-PICTOMANCER_MAIN.add_spell(spell_id=34686, cooldown=1, name="Tempera Grassa", icon="Tempera_Grassa.png", tags=[SpellTag.RAID_CD])
+PICTOMANCER_MAIN.add_spell(spell_id=34686, cooldown=1, duration=10, name="Tempera Grassa", icon="Tempera_Grassa.png", tags=[SpellTag.RAID_CD])

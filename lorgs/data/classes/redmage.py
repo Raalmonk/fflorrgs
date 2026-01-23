@@ -33,10 +33,10 @@ RED_MAGE_MAIN = WowSpec(role=RDPS, wow_class=RED_MAGE, name="Red Mage")
 RED_MAGE_MAIN.add_spell(spell_id=7520, cooldown=120, duration=20, name="Embolden", icon="Embolden.png", tags=[SpellTag.DAMAGE])
 RED_MAGE_MAIN.add_spell(spell_id=7517, cooldown=25, name="Fleche", icon="Fleche.png", tags=[SpellTag.DAMAGE])
 RED_MAGE_MAIN.add_spell(spell_id=7519, cooldown=35, name="Contre Sixte", icon="Contre_Sixte.png", tags=[SpellTag.DAMAGE])
-RED_MAGE_MAIN.add_spell(spell_id=7521, cooldown=110, duration=30, name="Manafication", icon="Manafication.png", tags=[SpellTag.DAMAGE])
+RED_MAGE_MAIN.add_spell(spell_id=7521, cooldown=110, duration=15, name="Manafication", icon="Manafication.png", tags=[SpellTag.DAMAGE])
 RED_MAGE_MAIN.add_spell(spell_id=7518, cooldown=55, duration=20, name="Acceleration", icon="Acceleration.png", tags=[SpellTag.DAMAGE])
 RED_MAGE_MAIN.add_spell(spell_id=7527, cooldown=1.5, name="Enchanted Riposte", icon="Enchanted_Riposte.png", tags=[SpellTag.DAMAGE])
-RED_MAGE_MAIN.add_spell(spell_id=150, cooldown=40, name="Swiftcast", icon="Swiftcast.png", tags=[SpellTag.DAMAGE])
+RED_MAGE_MAIN.add_spell(spell_id=150, cooldown=40, duration=10, name="Swiftcast", icon="Swiftcast.png", tags=[SpellTag.DAMAGE])
 RED_MAGE_MAIN.add_spell(spell_id=16528, cooldown=2.5, name="Enchanted Reprise", icon="Enchanted_Reprise.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
