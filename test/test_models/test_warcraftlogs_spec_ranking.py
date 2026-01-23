@@ -39,6 +39,9 @@ class TestSpecRanking(unittest.TestCase):
         assert 'specName: "SpecName"' in query
         assert 'metric: metric' in query
         assert 'difficulty: 101' in query
+        # check if cn alias is present (ignoring whitespace)
+        assert 'cn:' in query
+        assert 'serverRegion: "CN"' in query
 
     def test__process_query_result_one(self):
 
@@ -90,4 +93,5 @@ class TestSpecRanking(unittest.TestCase):
 
         self.spec_ranking.process_query_result(**data)
 
-        assert len(self.spec_ranking.reports) == 10
+        # Global limit is 5
+        assert len(self.spec_ranking.reports) == 5

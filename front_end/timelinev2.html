@@ -117,21 +117,53 @@
             return spellMap;
         };
 
-        // Helper to determine role and random partner
-        const getPartnerInfo = (specSlug) => {
-            const tanks = ['🛡️', '🪓', '🌑', '🔫'];
-            const healers = ['⚕️', '🧚', '✨', '🤖'];
-            
-            let role = 'dps';
-            if (specSlug.includes('paladin') || specSlug.includes('warrior') || specSlug.includes('darkknight') || specSlug.includes('gunbreaker')) role = 'tank';
-            if (specSlug.includes('whitemage') || specSlug.includes('scholar') || specSlug.includes('astrologian') || specSlug.includes('sage')) role = 'healer';
+        // Mock Data for Specs - Moved to Global Scope
+        const SPECS = [
+            { label: 'Tanks', items: [
+                {id:'paladin-paladin', icon:'paladin.png', n:'Paladin'},
+                {id:'warrior-warrior', icon:'warrior.png', n:'Warrior'},
+                {id:'darkknight-darkknight', icon:'Dark_Knight.png', n:'Dark Knight'},
+                {id:'gunbreaker-gunbreaker', icon:'Gunbreaker.png', n:'Gunbreaker'}
+            ]},
+            { label: 'Healers', items: [
+                {id:'whitemage-whitemage', icon:'White_Mage.png', n:'White Mage'},
+                {id:'scholar-scholar', icon:'Scholar.png', n:'Scholar'},
+                {id:'astrologian-astrologian', icon:'Astrologian.png', n:'Astrologian'},
+                {id:'sage-sage', icon:'Sage.png', n:'Sage'}
+            ]},
+            { label: 'Melee', items: [
+                {id:'monk-monk', icon:'monk.png', n:'Monk'},
+                {id:'dragoon-dragoon', icon:'Dragoon.png', n:'Dragoon'},
+                {id:'ninja-ninja', icon:'Ninja.png', n:'Ninja'},
+                {id:'samurai-samurai', icon:'Samurai.png', n:'Samurai'},
+                {id:'reaper-reaper', icon:'Reaper.png', n:'Reaper'},
+                {id:'viper-viper', icon:'Viper.png', n:'Viper'}
+            ]},
+            { label: 'Physical Ranged', items: [
+                {id:'bard-bard', icon:'Bard.png', n:'Bard'},
+                {id:'machinist-machinist', icon:'Machinist.png', n:'Machinist'},
+                {id:'dancer-dancer', icon:'Dancer.png', n:'Dancer'}
+            ]},
+            { label: 'Magical Ranged', items: [
+                {id:'blackmage-blackmage', icon:'Black_Mage.png', n:'Black Mage'},
+                {id:'summoner-summoner', icon:'Summoner.png', n:'Summoner'},
+                {id:'redmage-redmage', icon:'Red_Mage.png', n:'Red Mage'},
+                {id:'pictomancer-pictomancer', icon:'Pictomancer.png', n:'Pictomancer'}
+            ]},
+        ];
 
-            if (role === 'tank') return { role, icon: tanks[Math.floor(Math.random() * tanks.length)] };
-            if (role === 'healer') return { role, icon: healers[Math.floor(Math.random() * healers.length)] };
-            return { role: 'dps', icon: null };
+        const getIconForSpec = (specSlug) => {
+             const item = SPECS.flatMap(g => g.items).find(i => i.id === specSlug);
+             return item ? item.icon : null;
         };
 
-        // 2. fetchRankings (API with Region & Partner Mock)
+        const getRole = (specSlug) => {
+            if (specSlug.includes('paladin') || specSlug.includes('warrior') || specSlug.includes('darkknight') || specSlug.includes('gunbreaker')) return 'tank';
+            if (specSlug.includes('whitemage') || specSlug.includes('scholar') || specSlug.includes('astrologian') || specSlug.includes('sage')) return 'healer';
+            return 'dps';
+        };
+
+        // 2. fetchRankings (API with Region & Partner Logic)
         const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = []) => {
             console.log('[FFLorrgs] Starting fetch for:', specSlug, bossSlug);
 
@@ -159,16 +191,37 @@
                 }
 
                 allPlayers.sort((a, b) => b.total - a.total);
-                const topPlayers = allPlayers.slice(0, 20); 
+                // Filter out non-ranked players (partners) from the ranking list
+                // Ranked players usually have high DPS/HPS (total > 0). Partners have 0.
+                // Or simply: SpecRanking only loads full casts for players in `self.players` which were initially just the ranked ones.
+                // But we added partners to `fight.players`.
+                // We should filter to only show the "main" spec we are looking at.
+                // The `specSlug` argument tells us which spec we are ranking.
+                const rankedPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0).slice(0, 20);
 
-                const { role, icon: partnerIcon } = getPartnerInfo(specSlug);
+                const userRole = getRole(specSlug);
 
-                const rankData = topPlayers.map((player, index) => {
+                const rankData = rankedPlayers.map((player, index) => {
                      const id = `player-${player.source_id || index}`;
                      
                      const region = player.region || '??';
-                     // Partner Mock Logic (randomize slightly per player for visual variety if tank/healer)
-                     const finalPartner = (role === 'tank' || role === 'healer') ? partnerIcon : null;
+
+                     let partnerIcon = null;
+                     if (userRole === 'tank' || userRole === 'healer') {
+                         const partners = allPlayers.filter(p =>
+                            p.reportId === player.reportId &&
+                            p.fightId === player.fightId &&
+                            p.source_id !== player.source_id
+                         );
+                         const partner = partners.find(p => getRole(p.spec_slug) === userRole);
+                         if (partner) {
+                              const iconName = getIconForSpec(partner.spec_slug);
+                              if (iconName) {
+                                  partnerIcon = `${API_BASE}/lorrgs_assets/images/classes/${iconName}`;
+                              }
+                         }
+                     }
+                     const finalPartner = partnerIcon;
 
                      const existing = currentRankData.find(p => p.id === id);
                      if (existing) {
@@ -296,40 +349,7 @@
             const [isOpen, setIsOpen] = useState(false);
             const ref = useRef(null);
 
-            // Mock Data for Specs
-            const SPECS = [
-                { label: 'Tanks', items: [
-                    {id:'paladin-paladin', icon:'paladin.png', n:'Paladin'},
-                    {id:'warrior-warrior', icon:'warrior.png', n:'Warrior'},
-                    {id:'darkknight-darkknight', icon:'Dark_Knight.png', n:'Dark Knight'},
-                    {id:'gunbreaker-gunbreaker', icon:'Gunbreaker.png', n:'Gunbreaker'}
-                ]},
-                { label: 'Healers', items: [
-                    {id:'whitemage-whitemage', icon:'White_Mage.png', n:'White Mage'},
-                    {id:'scholar-scholar', icon:'Scholar.png', n:'Scholar'},
-                    {id:'astrologian-astrologian', icon:'Astrologian.png', n:'Astrologian'},
-                    {id:'sage-sage', icon:'Sage.png', n:'Sage'}
-                ]},
-                { label: 'Melee', items: [
-                    {id:'monk-monk', icon:'monk.png', n:'Monk'},
-                    {id:'dragoon-dragoon', icon:'Dragoon.png', n:'Dragoon'},
-                    {id:'ninja-ninja', icon:'Ninja.png', n:'Ninja'},
-                    {id:'samurai-samurai', icon:'Samurai.png', n:'Samurai'},
-                    {id:'reaper-reaper', icon:'Reaper.png', n:'Reaper'},
-                    {id:'viper-viper', icon:'Viper.png', n:'Viper'}
-                ]},
-                { label: 'Physical Ranged', items: [
-                    {id:'bard-bard', icon:'Bard.png', n:'Bard'},
-                    {id:'machinist-machinist', icon:'Machinist.png', n:'Machinist'},
-                    {id:'dancer-dancer', icon:'Dancer.png', n:'Dancer'}
-                ]},
-                { label: 'Magical Ranged', items: [
-                    {id:'blackmage-blackmage', icon:'Black_Mage.png', n:'Black Mage'},
-                    {id:'summoner-summoner', icon:'Summoner.png', n:'Summoner'},
-                    {id:'redmage-redmage', icon:'Red_Mage.png', n:'Red Mage'},
-                    {id:'pictomancer-pictomancer', icon:'Pictomancer.png', n:'Pictomancer'}
-                ]},
-            ];
+            // Uses Global SPECS variable
             
             const currentSpecItem = SPECS.flatMap(g => g.items).find(i => i.id === selectedSpec);
             const currentIcon = currentSpecItem?.icon || 'Red_Mage.png';
@@ -689,7 +709,7 @@
                                             
                                             {/* Partner Column - Only shows for Tank/Healer */}
                                             <div className="w-8 text-center flex justify-center items-center ml-1">
-                                                {row.partner && <span className="text-sm">{row.partner}</span>}
+                                                {row.partner && <img src={row.partner} alt="P" className="w-5 h-5 object-contain" />}
                                             </div>
                                         </div>
 

@@ -92,19 +92,26 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         """Return the Query to load the rankings for this Spec & Boss."""
         difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
 
+        def build_rankings_query(args=""):
+            return f"""
+                characterRankings(
+                    className: "{self.spec.wow_class.name_slug_cap}"
+                    specName: "{self.spec.name_slug_cap}"
+                    metric: {self.metric}
+                    difficulty: {difficulty_id}
+                    includeCombatantInfo: true
+                    {args}
+                )
+            """
+
         return textwrap.dedent(
             f"""\
         worldData
         {{
             encounter(id: {self.boss.id})
             {{
-                characterRankings(
-                    className: "{self.spec.wow_class.name_slug_cap}"
-                    specName: "{self.spec.name_slug_cap}"
-                    metric: {self.metric}
-                    difficulty: {difficulty_id}
-                    includeCombatantInfo: false
-                )
+                {build_rankings_query()}
+                cn: {build_rankings_query('serverRegion: "CN"')}
             }}
         }}
         """
@@ -146,6 +153,32 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             players=[player],
         )
 
+        # Parse combatantInfo to add partners
+        if ranking_data.combatantInfo:
+            for combatant in ranking_data.combatantInfo:
+                # Combatant is a dict
+                name = combatant.get("name")
+                if name == player.name:
+                    continue
+
+                spec_name = combatant.get("spec")
+                class_name = combatant.get("type")
+                if spec_name and spec_name.lower() in ("dps", "healer", "tank"):
+                     spec_name = class_name
+
+                spec = WowSpec.get(name_slug_cap=spec_name, wow_class__name_slug_cap=class_name)
+                if not spec:
+                    continue
+
+                p = Player(
+                    source_id=combatant.get("id"),
+                    name=name,
+                    spec_slug=spec.full_name_slug,
+                    total=0,
+                )
+                p.fight = fight
+                fight.players.append(p)
+
         ################
         # Report
         report = Report(
@@ -172,22 +205,20 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             self.add_new_fight(ranking_data)
 
     def process_query_result(self, **query_result: typing.Any):
-        """Process the Ranking Results.
-
-        Expected Query:
-        >>> {
-        >>>     worldData: {
-        >>>         encounter: {
-        >>>             characterRankings: ....
-        >>>         }
-        >>>     }
-        >>> }
-        """
+        """Process the Ranking Results."""
         # unwrap data
-        query_result = query_result["worldData"]
-        world_data = wcl.WorldData(**query_result)
+        encounter_data = query_result.get("worldData", {}).get("encounter", {})
 
-        rankings = world_data.encounter.characterRankings.rankings
+        # 1. Global (Top 5)
+        global_data = encounter_data.get("characterRankings", {})
+        global_rankings = wcl.CharacterRankings(**global_data).rankings[:5]
+
+        # 2. CN (Top 10)
+        cn_data = encounter_data.get("cn", {})
+        cn_rankings = wcl.CharacterRankings(**cn_data).rankings[:10]
+
+        # Merge
+        rankings = global_rankings + cn_rankings
         self.add_new_fights(rankings)
         self.post_init()
 
