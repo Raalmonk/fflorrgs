@@ -207,7 +207,7 @@ class Fight(warcraftlogs_base.BaseModel):
             self.combatant_info.append(spec.full_name_slug)
 
             # Get Total Damage or Healing
-            total_data = total_healing if spec.role.code == "heal" else total_damage
+            total_data = total_damage
             for data in total_data:
                 if data.id == composition_data.id:
                     total = data.total / (self.duration / 1000)
