@@ -41,8 +41,7 @@ class TestSpecRanking(unittest.TestCase):
         assert 'difficulty: 101' in query
         # check if cn alias is present (ignoring whitespace)
         assert 'cn:' in query
-        assert 'region: 4' in query
-        assert 'partition: 2' in query
+        assert 'serverRegion: "CN"' in query
 
     def test__process_query_result_one(self):
 
