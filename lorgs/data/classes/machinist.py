@@ -40,7 +40,7 @@ MACHINIST_MAIN.add_spell(spell_id=2876, cooldown=55, duration=5, name="Reassembl
 MACHINIST_MAIN.add_spell(spell_id=16501, cooldown=6, duration=12, name="Automaton Queen", icon="Automaton_Queen.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-MACHINIST_MAIN.add_spell(sspell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+MACHINIST_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
 MACHINIST_MAIN.add_spell(spell_id=7555, cooldown=90, duration=15, name="Tactician", icon="Tactician.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
