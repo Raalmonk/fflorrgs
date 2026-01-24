@@ -105,7 +105,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
                 )
             """
 
-        # CRITICAL FIX: Use partition: 5 for CN data
+        # CRITICAL FIX: Use partition: 3 for CN data
         return textwrap.dedent(
             f"""\
         worldData
@@ -113,7 +113,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
             encounter(id: {self.boss.id})
             {{
                 global: {build_rankings_query()}
-                cn: {build_rankings_query('areas: 3, serverRegion: "CN"')}
+                cn: {build_rankings_query('partition: 3, serverRegion: "CN"')}
             }}
         }}
         """
