@@ -30,13 +30,14 @@ SAMURAI_MAIN = WowSpec(role=MDPS, wow_class=SAMURAI, name="Samurai")
 #
 
 # Burst / Cooldowns
-SAMURAI_MAIN.add_spell(spell_id=7499, cooldown=55, duration=20, name="Meikyo Shisui", icon="Meikyo_Shisui.png", tags=[SpellTag.DAMAGE])
-SAMURAI_MAIN.add_spell(spell_id=7489, cooldown=2.5, duration=60, name="Higanbana", icon="Higanbana.png", tags=[SpellTag.DAMAGE])
-SAMURAI_MAIN.add_spell(spell_id=16482, cooldown=120, duration=30, name="Ikishoten", icon="Ikishoten.png", tags=[SpellTag.DAMAGE])
-SAMURAI_MAIN.add_spell(spell_id=7546, cooldown=45, duration=10, name="True North", icon="True_North.png", tags=[SpellTag.DAMAGE])
+SAMURAI_MAIN.add_spell(spell_id=16482, cooldown=120, name="Ikishoten", icon="Ikishoten.png", show=True,tags=[SpellTag.DAMAGE])
+
+SAMURAI_MAIN.add_spell(spell_id=7489, cooldown=2.5, duration=60, name="Higanbana", icon="Higanbana.png", show=True,tags=[SpellTag.DAMAGE])
+SAMURAI_MAIN.add_spell(spell_id=7499, cooldown=55, name="Meikyo Shisui", icon="Meikyo_Shisui.png", show=True,tags=[SpellTag.DAMAGE])
+SAMURAI_MAIN.add_spell(spell_id=7546, cooldown=45, duration=10, name="True North", icon="True_North.png", show=True,tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-SAMURAI_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
-SAMURAI_MAIN.add_spell(spell_id=7542, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
-SAMURAI_MAIN.add_spell(spell_id=36962, cooldown=15, duration=4, name="Tengentsu", icon="Tengentsu.png", tags=[SpellTag.DEFENSIVE])
-SAMURAI_MAIN.add_spell(spell_id=7549, cooldown=90, duration=15, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])
+SAMURAI_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", show=False,tags=[SpellTag.DEFENSIVE])
+SAMURAI_MAIN.add_spell(spell_id=7542, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", show=False,tags=[SpellTag.DEFENSIVE])
+SAMURAI_MAIN.add_spell(spell_id=36962, cooldown=15, duration=4, name="Tengentsu", icon="Tengentsu.png",show=False, tags=[SpellTag.DEFENSIVE])
+SAMURAI_MAIN.add_spell(spell_id=7549, cooldown=90, duration=15, name="Feint", icon="Feint.png", show=True,tags=[SpellTag.RAID_CD])

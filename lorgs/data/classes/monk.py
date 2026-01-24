@@ -38,9 +38,9 @@ MONK_MAIN.add_spell(spell_id=7546, cooldown=45, duration=10, name="True North",s
 
 # Self Mitigation
 MONK_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", show=False,tags=[SpellTag.DEFENSIVE])
-MONK_MAIN.add_spell(spell_id=34, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png",show=False, tags=[SpellTag.DEFENSIVE])
+MONK_MAIN.add_spell(spell_id=7542, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png",show=False, tags=[SpellTag.DEFENSIVE])
 MONK_MAIN.add_spell(spell_id=7394, cooldown=120, duration=10, name="Riddle of Earth", icon="Riddle_of_Earth.png",show=False, tags=[SpellTag.DEFENSIVE])
-MONK_MAIN.add_spell(spell_id=76, cooldown=90, duration=15, name="Feint", icon="Feint.png",show=True, tags=[SpellTag.DEFENSIVE])
+MONK_MAIN.add_spell(spell_id=7549, cooldown=90, duration=15, name="Feint", icon="Feint.png",show=True, tags=[SpellTag.RAID_CD])
 
 # Party Mitigation
 MONK_MAIN.add_spell(spell_id=65, cooldown=90, duration=15, name="Mantra", icon="Mantra.png",show=False, tags=[SpellTag.RAID_CD])

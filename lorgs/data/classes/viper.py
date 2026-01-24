@@ -30,12 +30,12 @@ VIPER_MAIN = WowSpec(role=MDPS, wow_class=VIPER, name="Viper")
 #
 
 # Burst / Cooldowns
-VIPER_MAIN.add_spell(spell_id=34626, cooldown=2.2, duration=30, name="Reawaken", icon="Reawaken.png", tags=[SpellTag.DAMAGE])
-VIPER_MAIN.add_spell(spell_id=34620, cooldown=40, name="Vicewinder", icon="Vicewinder.png", tags=[SpellTag.DAMAGE])
-VIPER_MAIN.add_spell(spell_id=34647, cooldown=120, duration=20, name="Serpent's Ire", icon="Serpent's_Ire.png", tags=[SpellTag.DAMAGE])
-VIPER_MAIN.add_spell(spell_id=34633, cooldown=3.5, name="Uncoiled Fury", icon="Uncoiled_Fury.png", tags=[SpellTag.DAMAGE])
+VIPER_MAIN.add_spell(spell_id=34626, cooldown=2.2, name="Reawaken", show=True,icon="Reawaken.png", tags=[SpellTag.DAMAGE])
+VIPER_MAIN.add_spell(spell_id=34620, cooldown=40, name="Vicewinder", icon="Vicewinder.png",show=True, tags=[SpellTag.DAMAGE])
+VIPER_MAIN.add_spell(spell_id=34647, cooldown=120, name="Serpent's Ire", icon="Serpent's_Ire.png", show=True,tags=[SpellTag.DAMAGE])
+VIPER_MAIN.add_spell(spell_id=34633, cooldown=3.5, name="Uncoiled Fury", icon="Uncoiled_Fury.png",show=True, tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-VIPER_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
-VIPER_MAIN.add_spell(spell_id=7542, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
-VIPER_MAIN.add_spell(spell_id=7549, cooldown=90, duration=15, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])
+VIPER_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", show=False,tags=[SpellTag.DEFENSIVE])
+VIPER_MAIN.add_spell(spell_id=7542, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", show=False,tags=[SpellTag.DEFENSIVE])
+VIPER_MAIN.add_spell(spell_id=7549, cooldown=90, duration=15, name="Feint", icon="Feint.png", show=True,tags=[SpellTag.RAID_CD])
