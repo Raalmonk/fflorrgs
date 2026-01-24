@@ -35,14 +35,14 @@ class TestSpecRanking(unittest.TestCase):
     def test__get_query(self):
         query = self.spec_ranking.get_query()
 
-        assert 'className: "ClassName"' in query
+        assert 'className: "Global"' in query
         assert 'specName: "SpecName"' in query
         assert 'metric: metric' in query
         assert 'difficulty: 101' in query
         # check if cn alias is present (ignoring whitespace)
         assert 'global:' in query
         assert 'cn:' in query
-        assert 'partition:3' in query
+        assert 'partition: 3' in query
         assert 'serverRegion: "CN"' in query
 
     def test__process_query_result_one(self):

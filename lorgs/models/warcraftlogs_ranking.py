@@ -93,11 +93,16 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
 
         # Helper to inject arguments
+        # FIX: Force className to "Global" to match the URL structure (&class=Global&spec=JobName)
+        # This is required for the API to correctly locate specs within the CN partition.
+        class_name = "Global"
+        spec_name = self.spec.name_slug_cap
+
         def build_rankings_query(extra_args: str = ""):
             return f"""
                 characterRankings(
-                    className: "{self.spec.wow_class.name_slug_cap}"
-                    specName: "{self.spec.name_slug_cap}"
+                    className: "{class_name}"
+                    specName: "{spec_name}"
                     metric: {self.metric}
                     difficulty: {difficulty_id}
                     includeCombatantInfo: true
