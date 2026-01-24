@@ -169,7 +169,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--boss", type=str, required=True, help="Boss Slug (e.g. vamp-fatale)")
     parser.add_argument("--spec", type=str, default="red-mage-red-mage", help="Spec Slug (e.g. red-mage-red-mage)")
-    parser.add_argument("--limit", type=int, default=5)
+    parser.add_argument("--limit", type=int, default=20)
     parser.add_argument("--difficulty", type=str, default="mythic")
     args = parser.parse_args()
 
