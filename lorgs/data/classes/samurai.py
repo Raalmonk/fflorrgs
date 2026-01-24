@@ -36,7 +36,7 @@ SAMURAI_MAIN.add_spell(spell_id=16482, cooldown=120, duration=30, name="Ikishote
 SAMURAI_MAIN.add_spell(spell_id=7546, cooldown=45, duration=10, name="True North", icon="True_North.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-SAMURAI_MAIN.add_spell(spell_id=57, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+SAMURAI_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
 SAMURAI_MAIN.add_spell(spell_id=34, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
 SAMURAI_MAIN.add_spell(spell_id=36962, cooldown=15, duration=4, name="Tengentsu", icon="Tengentsu.png", tags=[SpellTag.DEFENSIVE])
 SAMURAI_MAIN.add_spell(spell_id=76, cooldown=90, duration=15, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])

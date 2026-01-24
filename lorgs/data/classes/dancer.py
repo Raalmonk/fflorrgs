@@ -37,7 +37,7 @@ DANCER_MAIN.add_spell(spell_id=16005, cooldown=2.5, name="Saber Dance", icon="Sa
 DANCER_MAIN.add_spell(spell_id=16011, cooldown=120, duration=20, name="Devilment", icon="Devilment.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-DANCER_MAIN.add_spell(spell_id=57, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+DANCER_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
 DANCER_MAIN.add_spell(spell_id=16012, cooldown=90, duration=15, name="Shield Samba", icon="Shield_Samba.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
