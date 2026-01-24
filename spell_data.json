@@ -187,7 +187,7 @@
     "cooldown": 60.0,
     "icon": "Sprint_icon1.png",
     "duration": 10.0,
-    "show": true,
+    "show": null,
     "color": "#666666",
     "desc": "",
     "tags": [
@@ -559,7 +559,7 @@
     "cooldown": 25.0,
     "icon": "Heart_of_Corundum.png",
     "duration": 8.0,
-    "show": true,
+    "show": false,
     "color": "#796D30",
     "desc": "",
     "tags": [
@@ -575,7 +575,7 @@
     "cooldown": 60.0,
     "icon": "Aurora.png",
     "duration": 18.0,
-    "show": true,
+    "show": false,
     "color": "#796D30",
     "desc": "",
     "tags": [
@@ -1534,7 +1534,7 @@
     "id": 69,
     "cooldown": 40.0,
     "icon": "Perfect_Balance.png",
-    "duration": 20.0,
+    "duration": 0.0,
     "show": true,
     "color": "#D69C00",
     "desc": "",
@@ -1563,7 +1563,7 @@
   },
   "Riddle of Wind": {
     "name": "Riddle of Wind",
-    "id": 7868,
+    "id": 25766,
     "cooldown": 90.0,
     "icon": "Riddle_of_Wind.png",
     "duration": 15.0,
@@ -1615,11 +1615,11 @@
   },
   "Second Wind": {
     "name": "Second Wind",
-    "id": 57,
+    "id": 7541,
     "cooldown": 120.0,
     "icon": "Second_Wind.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#D69C00",
     "desc": "",
     "tags": [
@@ -1643,7 +1643,7 @@
     "cooldown": 90.0,
     "icon": "Bloodbath.png",
     "duration": 20.0,
-    "show": true,
+    "show": false,
     "color": "#D69C00",
     "desc": "",
     "tags": [
@@ -1664,7 +1664,7 @@
     "cooldown": 120.0,
     "icon": "Riddle_of_Earth.png",
     "duration": 10.0,
-    "show": true,
+    "show": false,
     "color": "#D69C00",
     "desc": "",
     "tags": [
@@ -1701,7 +1701,7 @@
     "cooldown": 90.0,
     "icon": "Mantra.png",
     "duration": 15.0,
-    "show": true,
+    "show": false,
     "color": "#D69C00",
     "desc": "",
     "tags": [
@@ -2079,61 +2079,13 @@
       "viper-viper"
     ]
   },
-  "Apex Arrow": {
-    "name": "Apex Arrow",
-    "id": 16496,
-    "cooldown": 2.5,
-    "icon": "Apex_Arrow.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#91BA5E",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "bard-bard"
-    ]
-  },
-  "Sidewinder": {
-    "name": "Sidewinder",
-    "id": 3562,
-    "cooldown": 60.0,
-    "icon": "Sidewinder.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#91BA5E",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "bard-bard"
-    ]
-  },
   "Raging Strikes": {
     "name": "Raging Strikes",
     "id": 101,
     "cooldown": 120.0,
     "icon": "Raging_Strikes.png",
     "duration": 20.0,
-    "show": true,
-    "color": "#91BA5E",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "bard-bard"
-    ]
-  },
-  "Radiant Finale": {
-    "name": "Radiant Finale",
-    "id": 25785,
-    "cooldown": 110.0,
-    "icon": "Radiant_Finale.png",
-    "duration": 15.0,
-    "show": true,
+    "show": false,
     "color": "#91BA5E",
     "desc": "",
     "tags": [
@@ -2159,12 +2111,28 @@
       "bard-bard"
     ]
   },
+  "Radiant Finale": {
+    "name": "Radiant Finale",
+    "id": 25785,
+    "cooldown": 110.0,
+    "icon": "Radiant_Finale.png",
+    "duration": 15.0,
+    "show": false,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
+  },
   "The Wanderer's Minuet": {
     "name": "The Wanderer's Minuet",
     "id": 8843,
     "cooldown": 120.0,
     "icon": "The_Wanderer's_Minuet.png",
-    "duration": 45.0,
+    "duration": 0.0,
     "show": true,
     "color": "#91BA5E",
     "desc": "",
@@ -2180,7 +2148,7 @@
     "id": 114,
     "cooldown": 120.0,
     "icon": "Mage's_Ballad.png",
-    "duration": 45.0,
+    "duration": 0.0,
     "show": true,
     "color": "#91BA5E",
     "desc": "",
@@ -2196,8 +2164,40 @@
     "id": 116,
     "cooldown": 120.0,
     "icon": "Army's_Paeon.png",
-    "duration": 45.0,
+    "duration": 0.0,
     "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
+  },
+  "Apex Arrow": {
+    "name": "Apex Arrow",
+    "id": 16496,
+    "cooldown": 2.5,
+    "icon": "Apex_Arrow.png",
+    "duration": 0.0,
+    "show": true,
+    "color": "#91BA5E",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "bard-bard"
+    ]
+  },
+  "Sidewinder": {
+    "name": "Sidewinder",
+    "id": 3562,
+    "cooldown": 60.0,
+    "icon": "Sidewinder.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#91BA5E",
     "desc": "",
     "tags": [
@@ -2217,7 +2217,7 @@
     "color": "#91BA5E",
     "desc": "",
     "tags": [
-      "defensive"
+      "raid_cd"
     ],
     "specs": [
       "bard-bard"
@@ -2229,7 +2229,7 @@
     "cooldown": 120.0,
     "icon": "Nature's_Minne.png",
     "duration": 15.0,
-    "show": true,
+    "show": false,
     "color": "#91BA5E",
     "desc": "",
     "tags": [
@@ -2239,75 +2239,11 @@
       "bard-bard"
     ]
   },
-  "Transpose": {
-    "name": "Transpose",
-    "id": 149,
-    "cooldown": 5.0,
-    "icon": "Transpose.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#A579D6",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "blackmage-blackmage"
-    ]
-  },
-  "Flare": {
-    "name": "Flare",
-    "id": 162,
-    "cooldown": 2.5,
-    "icon": "Flare.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#A579D6",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "blackmage-blackmage"
-    ]
-  },
-  "Flare Star": {
-    "name": "Flare Star",
-    "id": 3003,
-    "cooldown": 0.0,
-    "icon": "Flare_Star.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#A579D6",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "blackmage-blackmage"
-    ]
-  },
-  "Xenoglossy": {
-    "name": "Xenoglossy",
-    "id": 16507,
-    "cooldown": 2.5,
-    "icon": "Xenoglossy.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#A579D6",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "blackmage-blackmage"
-    ]
-  },
-  "Foul": {
-    "name": "Foul",
-    "id": 7422,
-    "cooldown": 2.5,
-    "icon": "Foul.png",
+  "Manafont": {
+    "name": "Manafont",
+    "id": 158,
+    "cooldown": 100.0,
+    "icon": "Manafont.png",
     "duration": 0.0,
     "show": true,
     "color": "#A579D6",
@@ -2340,7 +2276,7 @@
     "id": 7421,
     "cooldown": 60.0,
     "icon": "Triplecast.png",
-    "duration": 15.0,
+    "duration": 0.0,
     "show": true,
     "color": "#A579D6",
     "desc": "",
@@ -2353,11 +2289,11 @@
   },
   "Swiftcast": {
     "name": "Swiftcast",
-    "id": 150,
+    "id": 7561,
     "cooldown": 40.0,
     "icon": "Swiftcast.png",
     "duration": 10.0,
-    "show": true,
+    "show": false,
     "color": "#A579D6",
     "desc": "",
     "tags": [
@@ -2369,11 +2305,11 @@
       "pictomancer-pictomancer"
     ]
   },
-  "Manafont": {
-    "name": "Manafont",
-    "id": 158,
-    "cooldown": 100.0,
-    "icon": "Manafont.png",
+  "Xenoglossy": {
+    "name": "Xenoglossy",
+    "id": 16507,
+    "cooldown": 2.5,
+    "icon": "Xenoglossy.png",
     "duration": 0.0,
     "show": true,
     "color": "#A579D6",
@@ -2385,13 +2321,77 @@
       "blackmage-blackmage"
     ]
   },
+  "Foul": {
+    "name": "Foul",
+    "id": 7422,
+    "cooldown": 2.5,
+    "icon": "Foul.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
+  },
+  "Flare": {
+    "name": "Flare",
+    "id": 162,
+    "cooldown": 2.5,
+    "icon": "Flare.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
+  },
+  "Flare Star": {
+    "name": "Flare Star",
+    "id": 36989,
+    "cooldown": 0.0,
+    "icon": "Flare_Star.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
+  },
+  "Transpose": {
+    "name": "Transpose",
+    "id": 149,
+    "cooldown": 5.0,
+    "icon": "Transpose.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#A579D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "blackmage-blackmage"
+    ]
+  },
   "Paradox": {
     "name": "Paradox",
-    "id": 4325,
+    "id": 25797,
     "cooldown": 0.0,
     "icon": "Paradox.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#A579D6",
     "desc": "",
     "tags": [
@@ -2406,8 +2406,8 @@
     "id": 157,
     "cooldown": 120.0,
     "icon": "Manaward.png",
-    "duration": 20.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#A579D6",
     "desc": "",
     "tags": [
@@ -2427,7 +2427,7 @@
     "color": "#A579D6",
     "desc": "",
     "tags": [
-      "defensive"
+      "raid_cd"
     ],
     "specs": [
       "blackmage-blackmage",
@@ -2471,11 +2471,11 @@
       "summoner-summoner"
     ]
   },
-  "Summon Bahamut": {
-    "name": "Summon Bahamut",
-    "id": 7427,
+  "Summon Solar Bahamut": {
+    "name": "Summon Solar Bahamut",
+    "id": 36992,
     "cooldown": 60.0,
-    "icon": "Summon_Bahamut.png",
+    "icon": "Summon_Solar_Bahamut.png",
     "duration": 15.0,
     "show": true,
     "color": "#2D9B78",
@@ -2503,11 +2503,11 @@
       "summoner-summoner"
     ]
   },
-  "Summon Solar Bahamut": {
-    "name": "Summon Solar Bahamut",
-    "id": 36992,
+  "Summon Bahamut": {
+    "name": "Summon Bahamut",
+    "id": 7427,
     "cooldown": 60.0,
-    "icon": "Summon_Solar_Bahamut.png",
+    "icon": "Summon_Bahamut.png",
     "duration": 15.0,
     "show": true,
     "color": "#2D9B78",
@@ -2573,7 +2573,7 @@
     "cooldown": 1.0,
     "icon": "Necrotize.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#2D9B78",
     "desc": "",
     "tags": [
@@ -2589,7 +2589,7 @@
     "cooldown": 1.0,
     "icon": "Painflare.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#2D9B78",
     "desc": "",
     "tags": [
@@ -2604,8 +2604,8 @@
     "id": 25799,
     "cooldown": 60.0,
     "icon": "Radiant_Aegis.png",
-    "duration": 30.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#2D9B78",
     "desc": "",
     "tags": [
@@ -2621,7 +2621,7 @@
     "cooldown": 20.0,
     "icon": "Rekindle.png",
     "duration": 30.0,
-    "show": true,
+    "show": false,
     "color": "#2D9B78",
     "desc": "",
     "tags": [
@@ -2631,12 +2631,12 @@
       "summoner-summoner"
     ]
   },
-  "Drill": {
-    "name": "Drill",
-    "id": 16498,
-    "cooldown": 20.0,
-    "icon": "Drill.png",
-    "duration": 0.0,
+  "Automaton Queen": {
+    "name": "Automaton Queen",
+    "id": 16501,
+    "cooldown": 6.0,
+    "icon": "Automaton_Queen.png",
+    "duration": 12.0,
     "show": true,
     "color": "#6EE1D6",
     "desc": "",
@@ -2647,13 +2647,13 @@
       "machinist-machinist"
     ]
   },
-  "Air Anchor": {
-    "name": "Air Anchor",
-    "id": 16500,
-    "cooldown": 40.0,
-    "icon": "Air_Anchor.png",
+  "Reassemble": {
+    "name": "Reassemble",
+    "id": 2876,
+    "cooldown": 55.0,
+    "icon": "Reassemble.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#6EE1D6",
     "desc": "",
     "tags": [
@@ -2663,11 +2663,11 @@
       "machinist-machinist"
     ]
   },
-  "Chain Saw": {
-    "name": "Chain Saw",
-    "id": 25788,
-    "cooldown": 60.0,
-    "icon": "Chain_Saw.png",
+  "Hypercharge": {
+    "name": "Hypercharge",
+    "id": 17209,
+    "cooldown": 0.0,
+    "icon": "Hypercharge.png",
     "duration": 0.0,
     "show": true,
     "color": "#6EE1D6",
@@ -2700,8 +2700,8 @@
     "id": 2878,
     "cooldown": 120.0,
     "icon": "Wildfire.png",
-    "duration": 10.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#6EE1D6",
     "desc": "",
     "tags": [
@@ -2711,13 +2711,13 @@
       "machinist-machinist"
     ]
   },
-  "Reassemble": {
-    "name": "Reassemble",
-    "id": 2876,
-    "cooldown": 55.0,
-    "icon": "Reassemble.png",
-    "duration": 5.0,
-    "show": true,
+  "Drill": {
+    "name": "Drill",
+    "id": 16498,
+    "cooldown": 20.0,
+    "icon": "Drill.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#6EE1D6",
     "desc": "",
     "tags": [
@@ -2727,13 +2727,29 @@
       "machinist-machinist"
     ]
   },
-  "Automaton Queen": {
-    "name": "Automaton Queen",
-    "id": 16501,
-    "cooldown": 6.0,
-    "icon": "Automaton_Queen.png",
-    "duration": 12.0,
-    "show": true,
+  "Air Anchor": {
+    "name": "Air Anchor",
+    "id": 16500,
+    "cooldown": 40.0,
+    "icon": "Air_Anchor.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#6EE1D6",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "machinist-machinist"
+    ]
+  },
+  "Chain Saw": {
+    "name": "Chain Saw",
+    "id": 25788,
+    "cooldown": 60.0,
+    "icon": "Chain_Saw.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#6EE1D6",
     "desc": "",
     "tags": [
@@ -2745,7 +2761,7 @@
   },
   "Tactician": {
     "name": "Tactician",
-    "id": 7555,
+    "id": 16889,
     "cooldown": 90.0,
     "icon": "Tactician.png",
     "duration": 15.0,
@@ -2753,7 +2769,7 @@
     "color": "#6EE1D6",
     "desc": "",
     "tags": [
-      "defensive"
+      "raid_cd"
     ],
     "specs": [
       "machinist-machinist"
@@ -2919,38 +2935,6 @@
       "redmage-redmage"
     ]
   },
-  "Standard Step": {
-    "name": "Standard Step",
-    "id": 15997,
-    "cooldown": 30.0,
-    "icon": "Standard_Step.png",
-    "duration": 60.0,
-    "show": true,
-    "color": "#E2B0AF",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "dancer-dancer"
-    ]
-  },
-  "Flourish": {
-    "name": "Flourish",
-    "id": 16013,
-    "cooldown": 60.0,
-    "icon": "Flourish.png",
-    "duration": 20.0,
-    "show": true,
-    "color": "#E2B0AF",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "dancer-dancer"
-    ]
-  },
   "Technical Step": {
     "name": "Technical Step",
     "id": 15998,
@@ -2967,11 +2951,27 @@
       "dancer-dancer"
     ]
   },
-  "Saber Dance": {
-    "name": "Saber Dance",
-    "id": 16005,
-    "cooldown": 2.5,
-    "icon": "Saber_Dance.png",
+  "Devilment": {
+    "name": "Devilment",
+    "id": 16011,
+    "cooldown": 120.0,
+    "icon": "Devilment.png",
+    "duration": 20.0,
+    "show": false,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
+  },
+  "Flourish": {
+    "name": "Flourish",
+    "id": 16013,
+    "cooldown": 60.0,
+    "icon": "Flourish.png",
     "duration": 0.0,
     "show": true,
     "color": "#E2B0AF",
@@ -2983,13 +2983,29 @@
       "dancer-dancer"
     ]
   },
-  "Devilment": {
-    "name": "Devilment",
-    "id": 16011,
-    "cooldown": 120.0,
-    "icon": "Devilment.png",
-    "duration": 20.0,
+  "Standard Step": {
+    "name": "Standard Step",
+    "id": 15997,
+    "cooldown": 30.0,
+    "icon": "Standard_Step.png",
+    "duration": 0.0,
     "show": true,
+    "color": "#E2B0AF",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "dancer-dancer"
+    ]
+  },
+  "Saber Dance": {
+    "name": "Saber Dance",
+    "id": 16005,
+    "cooldown": 2.5,
+    "icon": "Saber_Dance.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#E2B0AF",
     "desc": "",
     "tags": [
@@ -3009,7 +3025,7 @@
     "color": "#E2B0AF",
     "desc": "",
     "tags": [
-      "defensive"
+      "raid_cd"
     ],
     "specs": [
       "dancer-dancer"
@@ -3021,7 +3037,7 @@
     "cooldown": 60.0,
     "icon": "Curing_Waltz.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#E2B0AF",
     "desc": "",
     "tags": [
@@ -3036,8 +3052,8 @@
     "id": 16014,
     "cooldown": 120.0,
     "icon": "Improvisation.png",
-    "duration": 15.0,
-    "show": true,
+    "duration": 0.0,
+    "show": false,
     "color": "#E2B0AF",
     "desc": "",
     "tags": [
@@ -3047,28 +3063,12 @@
       "dancer-dancer"
     ]
   },
-  "Holy in White": {
-    "name": "Holy in White",
-    "id": 34662,
-    "cooldown": 2.5,
-    "icon": "Holy_in_White.png",
-    "duration": 0.0,
-    "show": true,
-    "color": "#E060E0",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "pictomancer-pictomancer"
-    ]
-  },
-  "Comet in Black": {
-    "name": "Comet in Black",
-    "id": 34663,
-    "cooldown": 3.3,
-    "icon": "Comet_in_Black.png",
-    "duration": 0.0,
+  "Starry Muse": {
+    "name": "Starry Muse",
+    "id": 34675,
+    "cooldown": 120.0,
+    "icon": "Starry_Muse.png",
+    "duration": 20.0,
     "show": true,
     "color": "#E060E0",
     "desc": "",
@@ -3084,23 +3084,7 @@
     "id": 34683,
     "cooldown": 1.0,
     "icon": "Subtractive_Palette.png",
-    "duration": 30.0,
-    "show": true,
-    "color": "#E060E0",
-    "desc": "",
-    "tags": [
-      "dps"
-    ],
-    "specs": [
-      "pictomancer-pictomancer"
-    ]
-  },
-  "Starry Muse": {
-    "name": "Starry Muse",
-    "id": 34675,
-    "cooldown": 120.0,
-    "icon": "Starry_Muse.png",
-    "duration": 20.0,
+    "duration": 0.0,
     "show": true,
     "color": "#E060E0",
     "desc": "",
@@ -3133,7 +3117,7 @@
     "cooldown": 30.0,
     "icon": "Retribution_of_the_Madeen.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
     "color": "#E060E0",
     "desc": "",
     "tags": [
@@ -3149,7 +3133,39 @@
     "cooldown": 30.0,
     "icon": "Mog_of_the_Ages.png",
     "duration": 0.0,
-    "show": true,
+    "show": false,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
+  },
+  "Holy in White": {
+    "name": "Holy in White",
+    "id": 34662,
+    "cooldown": 2.5,
+    "icon": "Holy_in_White.png",
+    "duration": 0.0,
+    "show": false,
+    "color": "#E060E0",
+    "desc": "",
+    "tags": [
+      "dps"
+    ],
+    "specs": [
+      "pictomancer-pictomancer"
+    ]
+  },
+  "Comet in Black": {
+    "name": "Comet in Black",
+    "id": 34663,
+    "cooldown": 3.3,
+    "icon": "Comet_in_Black.png",
+    "duration": 0.0,
+    "show": false,
     "color": "#E060E0",
     "desc": "",
     "tags": [
@@ -3165,7 +3181,7 @@
     "cooldown": 120.0,
     "icon": "Tempera_Coat.png",
     "duration": 10.0,
-    "show": true,
+    "show": false,
     "color": "#E060E0",
     "desc": "",
     "tags": [
@@ -3181,7 +3197,7 @@
     "cooldown": 1.0,
     "icon": "Tempera_Grassa.png",
     "duration": 10.0,
-    "show": true,
+    "show": false,
     "color": "#E060E0",
     "desc": "",
     "tags": [

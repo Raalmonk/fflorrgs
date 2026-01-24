@@ -37,5 +37,5 @@ VIPER_MAIN.add_spell(spell_id=34633, cooldown=3.5, name="Uncoiled Fury", icon="U
 
 # Self Mitigation
 VIPER_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
-VIPER_MAIN.add_spell(spell_id=34, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
-VIPER_MAIN.add_spell(spell_id=76, cooldown=90, duration=15, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])
+VIPER_MAIN.add_spell(spell_id=7542, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
+VIPER_MAIN.add_spell(spell_id=7549, cooldown=90, duration=15, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])

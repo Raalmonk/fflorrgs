@@ -38,8 +38,8 @@ REAPER_MAIN.add_spell(spell_id=7546, cooldown=45, duration=10, name="True North"
 
 # Self Mitigation
 REAPER_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
-REAPER_MAIN.add_spell(spell_id=34, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
-REAPER_MAIN.add_spell(spell_id=76, cooldown=90, duration=15, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])
+REAPER_MAIN.add_spell(spell_id=7542, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
+REAPER_MAIN.add_spell(spell_id=7549, cooldown=90, duration=15, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])
 
 # Party Mitigation
 REAPER_MAIN.add_spell(spell_id=24404, cooldown=30, duration=15, name="Arcane Crest", icon="Arcane_Crest.png", tags=[SpellTag.RAID_CD])
