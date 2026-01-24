@@ -32,7 +32,7 @@ BLACK_MAGE_MAIN = WowSpec(role=RDPS, wow_class=BLACK_MAGE, name="Black Mage")
 # Burst / Cooldowns
 BLACK_MAGE_MAIN.add_spell(spell_id=158, cooldown=100, name="Manafont", icon="Manafont.png", show=True, tags=[SpellTag.DAMAGE])
 BLACK_MAGE_MAIN.add_spell(spell_id=3573, cooldown=120, duration=30, name="Ley Lines", icon="Ley_Lines.png", show=True, tags=[SpellTag.DAMAGE])
-BLACK_MAGE_MAIN.add_spell(spell_id=7421, cooldown=60, duration=15, name="Triplecast", icon="Triplecast.png", show=True, tags=[SpellTag.DAMAGE])
+BLACK_MAGE_MAIN.add_spell(spell_id=7421, cooldown=60, name="Triplecast", icon="Triplecast.png", show=True, tags=[SpellTag.DAMAGE])
 BLACK_MAGE_MAIN.add_spell(spell_id=7561, cooldown=40, duration=10, name="Swiftcast", icon="Swiftcast.png", show=False, tags=[SpellTag.DAMAGE])
 
 BLACK_MAGE_MAIN.add_spell(spell_id=16507, cooldown=2.5, name="Xenoglossy", icon="Xenoglossy.png", show=True, tags=[SpellTag.DAMAGE])
