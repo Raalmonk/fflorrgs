@@ -30,18 +30,22 @@ MACHINIST_MAIN = WowSpec(role=RDPS, wow_class=MACHINIST, name="Machinist")
 #
 
 # Burst / Cooldowns
-MACHINIST_MAIN.add_spell(spell_id=16498, cooldown=20, name="Drill", icon="Drill.png", tags=[SpellTag.DAMAGE])
-MACHINIST_MAIN.add_spell(spell_id=16500, cooldown=40, name="Air Anchor", icon="Air_Anchor.png", tags=[SpellTag.DAMAGE])
-MACHINIST_MAIN.add_spell(spell_id=25788, cooldown=60, name="Chain Saw", icon="Chain_Saw.png", tags=[SpellTag.DAMAGE])
-MACHINIST_MAIN.add_spell(spell_id=7414, cooldown=120, name="Barrel Stabilizer", icon="Barrel_Stabilizer.png", tags=[SpellTag.DAMAGE])
-MACHINIST_MAIN.add_spell(spell_id=2878, cooldown=120, duration=10, name="Wildfire", icon="Wildfire.png", tags=[SpellTag.DAMAGE])
-MACHINIST_MAIN.add_spell(spell_id=2876, cooldown=55, duration=5, name="Reassemble", icon="Reassemble.png", tags=[SpellTag.DAMAGE])
+MACHINIST_MAIN.add_spell(spell_id=16501, cooldown=6, duration=12, name="Automaton Queen", show=True, icon="Automaton_Queen.png", tags=[SpellTag.DAMAGE])
+MACHINIST_MAIN.add_spell(spell_id=2876, cooldown=55, name="Reassemble", show=False, icon="Reassemble.png", tags=[SpellTag.DAMAGE])
+MACHINIST_MAIN.add_spell(spell_id=17209, name="Hypercharge", show=True, icon="Hypercharge.png", tags=[SpellTag.DAMAGE])
+MACHINIST_MAIN.add_spell(spell_id=7414, cooldown=120, name="Barrel Stabilizer", show=True, icon="Barrel_Stabilizer.png", tags=[SpellTag.DAMAGE])
+MACHINIST_MAIN.add_spell(spell_id=2878, cooldown=120, name="Wildfire", show=False, icon="Wildfire.png", tags=[SpellTag.DAMAGE])
+MACHINIST_MAIN.add_spell(spell_id=16498, cooldown=20, name="Drill", show=False, icon="Drill.png", tags=[SpellTag.DAMAGE])
+MACHINIST_MAIN.add_spell(spell_id=16500, cooldown=40, name="Air Anchor", show=False, icon="Air_Anchor.png", tags=[SpellTag.DAMAGE])
+MACHINIST_MAIN.add_spell(spell_id=25788, cooldown=60, name="Chain Saw", show=False, icon="Chain_Saw.png", tags=[SpellTag.DAMAGE])
+
+
 # Removed duplicate Wildfire entry
-MACHINIST_MAIN.add_spell(spell_id=16501, cooldown=6, duration=12, name="Automaton Queen", icon="Automaton_Queen.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-MACHINIST_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
-MACHINIST_MAIN.add_spell(spell_id=7555, cooldown=90, duration=15, name="Tactician", icon="Tactician.png", tags=[SpellTag.DEFENSIVE])
+MACHINIST_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", show=False, icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+
 
 # Party Mitigation
-MACHINIST_MAIN.add_spell(spell_id=2887, cooldown=120, duration=10, name="Dismantle", icon="Dismantle.png", tags=[SpellTag.RAID_CD])
+MACHINIST_MAIN.add_spell(spell_id=16889, cooldown=90, duration=15, name="Tactician", show=True, icon="Tactician.png", tags=[SpellTag.RAID_CD])
+MACHINIST_MAIN.add_spell(spell_id=2887, cooldown=120, duration=10, name="Dismantle", show=True, icon="Dismantle.png", tags=[SpellTag.RAID_CD])

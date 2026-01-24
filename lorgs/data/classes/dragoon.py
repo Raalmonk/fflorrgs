@@ -37,6 +37,6 @@ DRAGOON_MAIN.add_spell(spell_id=3557, cooldown=120, duration=20, name="Battle Li
 DRAGOON_MAIN.add_spell(spell_id=7546, cooldown=45, duration=10, name="True North", icon="True_North.png", tags=[SpellTag.DAMAGE])
 
 # Self Mitigation
-DRAGOON_MAIN.add_spell(spell_id=57, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
+DRAGOON_MAIN.add_spell(spell_id=7541, cooldown=120, name="Second Wind", icon="Second_Wind.png", tags=[SpellTag.DEFENSIVE])
 DRAGOON_MAIN.add_spell(spell_id=34, cooldown=90, duration=20, name="Bloodbath", icon="Bloodbath.png", tags=[SpellTag.DEFENSIVE])
 DRAGOON_MAIN.add_spell(spell_id=76, cooldown=90, duration=15, name="Feint", icon="Feint.png", tags=[SpellTag.DEFENSIVE])
