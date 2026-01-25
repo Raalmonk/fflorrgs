@@ -1,11 +1,23 @@
-import json
-import os
 import sys
+import os
 
-# Ensure we can import lorgs
-sys.path.append(os.getcwd())
+# --- 🟢 必须最先执行：设置 AWS 假环境变量 ---
+# 只有先设置了这些，后面导入 lorgs 时 boto3 才不会报错
+os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+os.environ.setdefault("AWS_ACCESS_KEY_ID", "testing")
+os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "testing")
 
-# Import lorgs data (which loads all classes, specs, spells)
+# --- 路径修复 (保留你之前的修改) ---
+current_path = os.path.abspath(__file__)
+scripts_dir = os.path.dirname(current_path)
+project_root = os.path.dirname(scripts_dir)
+
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+# --- 🔴 只有上面都设置好了，才能导入 lorgs ---
+from lorgs import data
+# ... (后面的代码保持不变)
 from lorgs import data
 
 def main():
