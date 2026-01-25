@@ -78,9 +78,9 @@
     "color": "#FFF0F5",
     "load_order": 5,
     "show": true,
-    "category": "SINGLE_MIT",
+    "category": "RAID_MIT",
     "debug_tags": [
-      "defensive"
+      "raid_cd"
     ]
   },
   {

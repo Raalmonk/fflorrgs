@@ -40,7 +40,7 @@ WHITE_MAGE_MAIN.add_spell(spell_id=7432, cooldown=30, name="Divine Benison", sho
 
 
 # Party Mitigation
-WHITE_MAGE_MAIN.add_spell(spell_id=25862, cooldown=180,  name="Liturgy of the Bell", show=True,icon="Liturgy_of_the_Bell.png", tags=[SpellTag.DEFENSIVE])
+WHITE_MAGE_MAIN.add_spell(spell_id=25862, cooldown=180,  name="Liturgy of the Bell", show=True,icon="Liturgy_of_the_Bell.png", tags=[SpellTag.RAID_CD])
 WHITE_MAGE_MAIN.add_spell(spell_id=16536, cooldown=120, duration=20, name="Temperance", show=True,icon="Temperance.png", tags=[SpellTag.RAID_CD])
 WHITE_MAGE_MAIN.add_spell(spell_id=7433, cooldown=60, duration=10, name="Plenary Indulgence", show=True,icon="Plenary_Indulgence.png", tags=[SpellTag.RAID_CD])
 WHITE_MAGE_MAIN.add_spell(spell_id=37011, cooldown=1, name="Divine Caress", show=False,icon="Divine_Caress.png", tags=[SpellTag.RAID_CD])
