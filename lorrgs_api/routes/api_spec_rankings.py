@@ -28,17 +28,12 @@ async def get_spec_ranking(
 
     logger.info(f"{spec_slug}/{boss_slug} | start ({difficulty}/{metric})")
 
-    # --- FORCED UPDATE FOR DEBUGGING ---
-    logger.info("Forcing synchronous update for local dev...")
-
     ranking = warcraftlogs_ranking.SpecRanking.get_or_create(
         boss_slug=boss_slug,
         spec_slug=spec_slug,
         difficulty=difficulty,
         metric=metric,
     )
-    await ranking.load(limit=80, clear_old=True)
-    # -----------------------------------
 
     # shorter cache timeout for the start of the tier (where frequent changes happen)
     response.headers["Cache-Control"] = "max-age=300"
