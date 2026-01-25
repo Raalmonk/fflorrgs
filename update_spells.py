@@ -14,7 +14,6 @@ sys.path.append(os.getcwd())
 
 # --- 2. 导入业务模块 ---
 from lorgs.logger import logger
-# 【修复】同时导入 SpellTag 和 SpellType
 from lorgs.models.wow_spell import SpellTag, SpellType 
 
 # 日志设置
@@ -25,6 +24,7 @@ logger = logging.getLogger(__name__)
 try:
     from lorgs.data.classes import ALL_SPECS
     from lorgs.data.expansions.dawntrail.raids.arcadion_heavyweight import ARCADION_HEAVYWEIGHT
+    import lorgs.data.items.potions # 确保药水和冲刺被加载
 except ImportError as e:
     logger.error(f"Failed to import lorgs modules: {e}")
     sys.exit(1)
@@ -32,25 +32,25 @@ except ImportError as e:
 
 # --- 3. 辅助函数 ---
 def get_spell_category(spell):
-    """根据技能属性计算前端分类"""
+    """根据技能属性计算前端分类 (增强版)"""
     tags = spell.tags or []
     
-    # 优先级 1: 团减 (Group Mit)
-    if SpellTag.RAID_MIT in tags:
+    # --- 团减 / 团辅 (Group Mit) ---
+    # 你的逻辑: RAID_CD (奶妈大招) 也算进团减组
+    if SpellTag.RAID_MIT in tags or SpellTag.RAID_CD in tags:
         return "RAID_MIT" 
     
-    # 优先级 2: 单减 (Single Mit) - 包括坦克减伤
-    if SpellTag.TANK_MIT in tags or SpellTag.SINGLE_MIT in tags:
+    # --- 单减 / 个人减伤 (Single Mit) ---
+    # 你的逻辑: DEFENSIVE (个人减伤) 算进单减组
+    if SpellTag.TANK_MIT in tags or SpellTag.SINGLE_MIT in tags or SpellTag.DEFENSIVE in tags:
         return "SINGLE_MIT" 
     
-    # 优先级 3: 功能性 / 药水
-    # 【修复】使用 SpellType.POTION 来判断药水
-    if spell.spell_type == SpellType.POTION:
-        return "UTILITY"
-    if SpellTag.UTILITY in tags:
+    # --- 功能性 / 药水 ---
+    if spell.spell_type == SpellType.POTION or SpellTag.UTILITY in tags:
         return "UTILITY"
         
-    # 默认: 爆发/主要技能 (CD)
+    # --- 默认: 爆发/主要技能 (CD) ---
+    # 包括 SpellTag.DAMAGE
     return "MAJOR"
 
 def parse_time(time_str):
@@ -70,6 +70,7 @@ def generate_player_spells():
     """生成所有职业的技能文件 (spells_spec-slug.json)"""
     logger.info(">>> 开始生成职业技能数据...")
     
+    # 按字母顺序排序
     all_specs = sorted(list(ALL_SPECS), key=lambda s: s.full_name_slug)
     
     count = 0
@@ -77,8 +78,10 @@ def generate_player_spells():
         spec_slug = spec.full_name_slug
         spells_data = []
         
-        for spell in spec.all_spells:
-            # 【修复】传入整个 spell 对象
+        # 遍历该职业的所有可用技能
+        # enumerat提供索引 i，用作 load_order
+        for i, spell in enumerate(spec.all_spells):
+            
             cat = get_spell_category(spell)
             
             spell_obj = {
@@ -88,8 +91,12 @@ def generate_player_spells():
                 "cooldown": spell.cooldown,
                 "duration": spell.duration,
                 "color": spell.color,
-                "show": spell.show,
-                "category": cat,
+                
+                # --- 核心修复 ---
+                "load_order": i,       # 1. 强制记录文件里的顺序 (0, 1, 2...)
+                "show": spell.show,    # 是否显示
+                "category": cat,       # 2. 使用增强后的分类逻辑
+                
                 "debug_tags": [str(t) for t in (spell.tags or [])]
             }
             spells_data.append(spell_obj)

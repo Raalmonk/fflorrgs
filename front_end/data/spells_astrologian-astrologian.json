@@ -6,6 +6,7 @@
     "cooldown": 120.0,
     "duration": 20.0,
     "color": "#FFE74A",
+    "load_order": 0,
     "show": true,
     "category": "MAJOR",
     "debug_tags": [
@@ -19,6 +20,7 @@
     "cooldown": 60.0,
     "duration": 15.0,
     "color": "#FFE74A",
+    "load_order": 1,
     "show": true,
     "category": "MAJOR",
     "debug_tags": [
@@ -32,6 +34,7 @@
     "cooldown": 1.0,
     "duration": 0.0,
     "color": "#FFE74A",
+    "load_order": 2,
     "show": false,
     "category": "MAJOR",
     "debug_tags": [
@@ -45,8 +48,9 @@
     "cooldown": 40.0,
     "duration": 0.0,
     "color": "#FFE74A",
+    "load_order": 3,
     "show": false,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -58,8 +62,9 @@
     "cooldown": 60.0,
     "duration": 8.0,
     "color": "#FFE74A",
+    "load_order": 4,
     "show": false,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -71,8 +76,9 @@
     "cooldown": 30.0,
     "duration": 0.0,
     "color": "#FFE74A",
+    "load_order": 5,
     "show": false,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -84,8 +90,9 @@
     "cooldown": 180.0,
     "duration": 0.0,
     "color": "#FFE74A",
+    "load_order": 6,
     "show": true,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -97,8 +104,9 @@
     "cooldown": 120.0,
     "duration": 30.0,
     "color": "#FFE74A",
+    "load_order": 7,
     "show": true,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -110,8 +118,9 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#FFE74A",
+    "load_order": 8,
     "show": true,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -123,8 +132,9 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#FFE74A",
+    "load_order": 9,
     "show": false,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -136,8 +146,9 @@
     "cooldown": 60.0,
     "duration": 15.0,
     "color": "#FFE74A",
+    "load_order": 10,
     "show": false,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -149,8 +160,9 @@
     "cooldown": 1.0,
     "duration": 0.0,
     "color": "#FFE74A",
+    "load_order": 11,
     "show": false,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -162,8 +174,9 @@
     "cooldown": 1.0,
     "duration": 15.0,
     "color": "#FFE74A",
+    "load_order": 12,
     "show": false,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -175,6 +188,7 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
+    "load_order": 13,
     "show": false,
     "category": "UTILITY",
     "debug_tags": [
@@ -188,6 +202,7 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
+    "load_order": 14,
     "show": null,
     "category": "UTILITY",
     "debug_tags": [

@@ -6,6 +6,7 @@
     "cooldown": 120.0,
     "duration": 0.0,
     "color": "#D126CC",
+    "load_order": 0,
     "show": true,
     "category": "MAJOR",
     "debug_tags": [
@@ -19,6 +20,7 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#D126CC",
+    "load_order": 1,
     "show": true,
     "category": "MAJOR",
     "debug_tags": [
@@ -32,6 +34,7 @@
     "cooldown": 90.0,
     "duration": 15.0,
     "color": "#D126CC",
+    "load_order": 2,
     "show": true,
     "category": "MAJOR",
     "debug_tags": [
@@ -45,6 +48,7 @@
     "cooldown": 60.0,
     "duration": 0.0,
     "color": "#D126CC",
+    "load_order": 3,
     "show": false,
     "category": "MAJOR",
     "debug_tags": [
@@ -58,8 +62,9 @@
     "cooldown": 120.0,
     "duration": 15.0,
     "color": "#D126CC",
+    "load_order": 4,
     "show": true,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -71,8 +76,9 @@
     "cooldown": 90.0,
     "duration": 20.0,
     "color": "#D126CC",
+    "load_order": 5,
     "show": true,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -84,8 +90,9 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#D126CC",
+    "load_order": 6,
     "show": true,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -97,8 +104,9 @@
     "cooldown": 15.0,
     "duration": 0.0,
     "color": "#D126CC",
+    "load_order": 7,
     "show": false,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -110,8 +118,9 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#D126CC",
+    "load_order": 8,
     "show": false,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -123,8 +132,9 @@
     "cooldown": 300.0,
     "duration": 10.0,
     "color": "#D126CC",
+    "load_order": 9,
     "show": true,
-    "category": "MAJOR",
+    "category": "SINGLE_MIT",
     "debug_tags": [
       "defensive"
     ]
@@ -136,8 +146,9 @@
     "cooldown": 60.0,
     "duration": 15.0,
     "color": "#D126CC",
+    "load_order": 10,
     "show": true,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -149,8 +160,9 @@
     "cooldown": 90.0,
     "duration": 15.0,
     "color": "#D126CC",
+    "load_order": 11,
     "show": true,
-    "category": "MAJOR",
+    "category": "RAID_MIT",
     "debug_tags": [
       "raid_cd"
     ]
@@ -162,6 +174,7 @@
     "cooldown": 270,
     "duration": 30.0,
     "color": "#b576e8",
+    "load_order": 12,
     "show": false,
     "category": "UTILITY",
     "debug_tags": [
@@ -175,6 +188,7 @@
     "cooldown": 60.0,
     "duration": 10.0,
     "color": "#666666",
+    "load_order": 13,
     "show": null,
     "category": "UTILITY",
     "debug_tags": [

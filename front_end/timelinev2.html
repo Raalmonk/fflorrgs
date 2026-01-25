@@ -105,12 +105,15 @@ const fetchSpellData = async (specSlug = 'redmage-redmage') => {
                         duration: spell.duration || 0,
                         color: spell.color || '#ffcc00',
                         
-                        // --- 修复点 1: 读取 JSON 里的真实分类 ---
+                        // 读取分类
                         category: spell.category || 'MAJOR', 
                         
-                        // --- 修复点 2: 读取 JSON 里的默认显示状态 ---
-                        // 注意: 必须判断 undefined，因为 show 可能是 false
-                        show: (spell.show !== undefined && spell.show !== null) ? spell.show : true
+                        // 读取显示状态
+                        show: (spell.show !== undefined && spell.show !== null) ? spell.show : true,
+
+                        // --- 🟢 关键修复: 必须显式读取 load_order ---
+                        // 如果 JSON 里有 load_order 就用它，没有就给个默认大值(排最后)
+                        load_order: (spell.load_order !== undefined) ? spell.load_order : 9999
                     };
                 });
                 return spellMap;
@@ -307,8 +310,9 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                 'red-hot-and-deep-blue': 'm10s',
                 'the-tyrant': 'm11s',
                 'lindwurm': 'm12s_p1',
+                
                 // 如果你有P2的话
-                'gaia-memory': 'm12s_p2', 
+                
                 'lindwurm-ii': 'm12s_p2'
             };
 
@@ -736,6 +740,7 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                                 <option value="red-hot-and-deep-blue">M10S: Red Hot and Deep Blue</option>
                                 <option value="the-tyrant">M11S: The Tyrant</option>
                                 <option value="lindwurm">M12S P1: Lindwurm</option>
+                                <option value="lindwurm-ii">M12S P2: Lindwurm</option>
                             </select>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             <span className="text-gray-400 text-sm">Spec:</span>
@@ -744,7 +749,19 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                             <CompositionFilter activeFilterSpecs={activeFilterSpecs} onApply={setActiveFilterSpecs} />
                         </div>
                     </div>
+                    {/* Right side with Discord Icon */}
                     <div className="flex items-center gap-4">
+                        <a 
+                            href="https://discord.gg/sanrrfanclub" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-[#5865F2] hover:text-white transition-colors p-2" 
+                            title="Join Discord"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 127.14 96.36" fill="currentColor">
+                                <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-2-47.27-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5.06-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+                            </svg>
+                        </a>
                     </div>
                 </nav>
 
@@ -761,7 +778,8 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                         <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Boss</span>
                         <div className="flex items-center gap-2">
                             <div className={`w-8 h-8 rounded border-2 overflow-hidden cursor-pointer transition ${showBossRow ? 'border-[#00FF96] opacity-100' : 'border-gray-700 opacity-50 grayscale'}`} onClick={() => setShowBossRow(!showBossRow)} title="Toggle Boss Row">
-                                <img src="https://xivapi.com/i/068000/068057.png" alt="Boss" className="w-full h-full object-cover" />
+                                {/* Modified Image Source */}
+                                <img src="./images/classes/inv_achievement_raiddragon_sarkareth.jpg" alt="Boss" className="w-full h-full object-cover" />
                             </div>
                         </div>
                     </div>
