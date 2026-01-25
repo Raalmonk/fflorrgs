@@ -8,6 +8,18 @@ import sys
 # Ensure lorgs module is found
 sys.path.append(os.getcwd())
 
+# Setup Environment Variables (copied from main.py for independent execution)
+os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+# Credentials for S3/DynamoDB (if needed by underlying libs, usually 'testing' for local/dev)
+os.environ.setdefault("AWS_ACCESS_KEY_ID", "testing")
+os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "testing")
+
+# WCL Credentials
+# Ensure these are set in your environment or .env file
+if not os.environ.get("WCL_CLIENT_ID") or not os.environ.get("WCL_CLIENT_SECRET"):
+    logger.warning("WCL Credentials not found in environment variables. Script may fail if credentials are required.")
+
+
 # Setup Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
