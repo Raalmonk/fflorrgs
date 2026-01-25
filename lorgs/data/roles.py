@@ -5,8 +5,8 @@ from lorgs.models.wow_role import WowRole
 ################################################################################
 # ROLES
 #
-TANK = WowRole(id=1, code="tank", name="Tank", metric="dps") # 坦克通常看 dps 或 ndps
-HEAL = WowRole(id=2, code="heal", name="Healer", metric="hps")
+TANK = WowRole(id=1, code="tank", name="Tank", metric="rdps") # 坦克通常看 dps 或 ndps
+HEAL = WowRole(id=2, code="heal", name="Healer", metric="rdps")
 
 # === 🟢 修改这里 ===
 # 显式指定 metric="rdps"，这样 api_spec_rankings.py 就会使用 "rdps" 去查询 API
@@ -15,7 +15,7 @@ MDPS = WowRole(
     code="mdps", 
     name="Melee", 
     metric="rdps",             # <--- 核心修改：默认使用 rdps
-    metrics=["rdps", "adps"]   # <--- 可选：更新支持的指标列表
+    metrics=["rdps", "rdps"]   # <--- 可选：更新支持的指标列表
 )
 
 RDPS = WowRole(
@@ -23,7 +23,7 @@ RDPS = WowRole(
     code="rdps", 
     name="Range", 
     metric="rdps",             # <--- 核心修改：默认使用 rdps
-    metrics=["rdps", "adps"]   # <--- 可选：更新支持的指标列表
+    metrics=["rdps", "rdps"]   # <--- 可选：更新支持的指标列表
 )
 # ==================
 

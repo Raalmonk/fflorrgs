@@ -37,7 +37,7 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     spec_slug: str
     boss_slug: str
     difficulty: str = "mythic"
-    metric: str = ""
+    metric: str = "rdps"
     reports: list[Report] = []
 
     updated: datetime.datetime = datetime.datetime.min
@@ -92,13 +92,11 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         """Return the Query to load the rankings for this Spec & Boss."""
         difficulty_id = DIFFICULTY_IDS.get(self.difficulty) or 101
 
-        # 1. 获取名字参数
-        # Global 查询：必须使用具体的职业名 (例如 "Scholar")，否则 API 不会返回 combatantInfo
         real_class_name = "Global"
+        cn_class_name = "Global"
         spec_name = self.spec.name_slug_cap
 
-        # CN 查询：由于分区特殊性，必须使用 "Global" 作为 className
-        cn_class_name = "Global"
+        
 
         # 2. 定义查询构建函数 (支持传入不同的 class_name)
         def build_rankings_query(class_name_arg: str, extra_args: str = ""):
