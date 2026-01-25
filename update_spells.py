@@ -3,12 +3,18 @@ import logging
 import os
 import sys
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # --- 1. 环境配置 ---
-os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+os.environ.setdefault("AWS_DEFAULT_REGION", "us-east-1")
 os.environ.setdefault("AWS_ACCESS_KEY_ID", "testing")
 os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "testing")
-os.environ["WCL_CLIENT_ID"] = "dummy"
-os.environ["WCL_CLIENT_SECRET"] = "dummy"
+
+if not os.getenv("WCL_CLIENT_ID") or not os.getenv("WCL_CLIENT_SECRET"):
+    print("Error: WCL_CLIENT_ID and WCL_CLIENT_SECRET must be set in environment variables or .env file.")
+    sys.exit(1)
 
 sys.path.append(os.getcwd())
 
