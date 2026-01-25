@@ -378,3 +378,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         # 更新时间戳
         self.updated = datetime.datetime.now(datetime.timezone.utc)
         self.dirty = False
+
+from lorgs.models.warcraftlogs_report import Report
+SpecRanking.model_rebuild()

@@ -29,8 +29,8 @@ async def load_spec_rankings(
     if spec and spec.role.code == "heal":
         metric = "rdps"
     
-    if metric == "dps":
-        metric = "rdps"
+    
+    metric = "rdps"
 
     # fmt: off
     print(f"loading: {boss_slug} vs {spec_slug} | (difficulty={difficulty} / metric={metric} / limit={limit} / clear={clear})")

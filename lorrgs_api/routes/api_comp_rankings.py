@@ -17,7 +17,7 @@ async def get_comp_ranking(
     response: fastapi.Response,
     boss_slug: str,
     # Query Params
-    limit: int = 20,
+    limit: int = 100,
     roles: list[str] = fastapi.Query([], alias="role"),
     specs: list[str] = fastapi.Query([], alias="spec"),
     killtime_min: int = 0,
@@ -72,7 +72,7 @@ async def get_comp_ranking(
 #
 @router.get("/comp_ranking/load/{boss_slug}")
 async def task_load_comp_rankings(
-    response: fastapi.Response, boss_slug: str = "all", limit: int = 50, clear: bool = False
+    response: fastapi.Response, boss_slug: str = "all", limit: int = 100, clear: bool = False
 ):
     """Submit a scheduled task to update a single or all Comp Rankings."""
     response.headers["Cache-Control"] = "no-cache"
@@ -88,7 +88,7 @@ async def task_load_comp_rankings(
             }
         )
 
-    pages = (limit // 50) + 1  # 50 reports per page. +1 becaus we need to round up
+    pages = (limit // 100) + 1  # 50 reports per page. +1 becaus we need to round up
     for page in range(pages):
         payloads.append(
             {
