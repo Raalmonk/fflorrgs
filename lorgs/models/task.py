@@ -9,12 +9,14 @@ import typing
 import pydantic
 
 # IMPORT LOCAL LIBRARIES
-from lorgs.models.base import redis
+#from lorgs.models.base import redis
+from lorgs.models.base import base
 
 
-class Task(redis.RedisModel):
+class Task(redis.DynamoDBModel):
     """"""
-
+    key: typing.ClassVar[str] = "{task_id}"
+    skey: typing.ClassVar[str] = "task_info"
     class STATUS:
         NEW = "new"
         WAITING = "waiting"
