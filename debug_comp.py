@@ -1,4 +1,3 @@
-# check_bosses.py
 import os
 import sys
 
@@ -12,11 +11,17 @@ from lorgs.models.raid_zone import RaidZone
 # 3. 打印所有已注册的 Boss
 print("--- Loaded Bosses ---")
 found = False
-for zone in RaidZone.all_zones:
+
+# [修正点] 使用 .list() 获取所有内存中的 Zone 对象
+zones = RaidZone.list()
+print(f"DEBUG: Found {len(zones)} zones in memory.")
+
+for zone in zones:
     print(f"\nZone: {zone.name} (ID: {zone.id})")
     for boss in zone.bosses:
         print(f"  - [{boss.id}] {boss.name} (Nick: {boss.nick}) -> Slug: {boss.full_name_slug}")
-        if boss.nick == "M12S P2":
+        # 检查 Nick 或者 Slug
+        if boss.nick == "M12S P2" or "lindwurm-ii" in boss.full_name_slug:
             found = True
 
 print("\n-------------------")
