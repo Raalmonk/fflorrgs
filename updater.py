@@ -6,14 +6,19 @@ import os
 import sys
 import time
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # --- 1. 环境配置 ---
-os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+os.environ.setdefault("AWS_DEFAULT_REGION", "us-east-1")
 os.environ.setdefault("AWS_ACCESS_KEY_ID", "testing")
 os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "testing")
 
 # WCL 密钥
-os.environ["WCL_CLIENT_ID"] = "a0e16bba-fba8-432d-a317-4a6a83d98728"
-os.environ["WCL_CLIENT_SECRET"] = "Rowpl4stVguifS4YJbzow1HCjh1g2uNuGNaFYRPk"
+if not os.getenv("WCL_CLIENT_ID") or not os.getenv("WCL_CLIENT_SECRET"):
+    print("Error: WCL_CLIENT_ID and WCL_CLIENT_SECRET must be set in environment variables or .env file.")
+    sys.exit(1)
 
 # 确保能找到 lorgs 包
 sys.path.append(os.getcwd())
