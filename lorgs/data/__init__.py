@@ -25,3 +25,4 @@ from lorgs.data.items import *
 # from lorgs.data.expansions import shadowlands
 # from lorgs.data.expansions import dragonflight
 # from lorgs.data.expansions import the_war_within
+from lorgs.data.expansions import dawntrail

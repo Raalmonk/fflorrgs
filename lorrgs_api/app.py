@@ -13,6 +13,7 @@ from lorrgs_api.middlewares import cache_middleware, cors_middleware
 from lorrgs_api.routes import api
 from lorrgs_api.routes import views
 
+from lorgs.data.expansions import dawntrail
 
 def create_app() -> fastapi.FastAPI:
     """Create and return a new QuartApp-Instance.

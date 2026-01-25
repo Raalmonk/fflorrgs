@@ -257,6 +257,8 @@ class Fight(warcraftlogs_base.BaseModel):
 
         self.players.sort(key=lambda player: (player.spec.role, player.spec, player.name))
 
+        self.composition = [p.spec_slug for p in self.players]
+
         # --- DEBUG START ---
         print(f"[DEBUG-4] Final Player Count: {len(self.players)}")
         # --- DEBUG END ---
