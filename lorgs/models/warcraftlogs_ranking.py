@@ -260,6 +260,11 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
             self.add_new_fight(ranking_data)
 
+    @staticmethod
+    def _normalize_name(name: str) -> str:
+        if not name: return ""
+        return name.split("-")[0].strip()
+
     def process_query_result(self, **query_result: typing.Any):
         """Process the Ranking Results."""
         # unwrap data
