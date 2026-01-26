@@ -354,96 +354,72 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         if clear_old:
             self.reports = []
 
-        # 1. 加载排行榜
+        # 1. Load Rankings
         await self.load_rankings()
         self.reports = self.sort_reports(self.reports)
 
         # ============================================================
-        # [快照 v4] 天罗地网策略 (Multi-Key Snapshot)
-        # 为防止名字在加载详情时发生微变（如加服务器名、去特殊符号等），
-        # 我们为同一个数值存储多个“别名 Key”。
+        # [NEW] Snapshot Official DPS
         # ============================================================
         official_dps_map = {}
-        
-        def generate_keys(fight_id, name):
-            """生成该名字的所有可能变体 Key"""
-            keys = set()
-            # 1. 原始全名
-            keys.add((fight_id, name))
-            # 2. 去除两端空格
-            keys.add((fight_id, name.strip()))
-            # 3. 只有名字部分 (去除 -Server)
-            if "-" in name:
-                keys.add((fight_id, name.split("-")[0].strip()))
-            # 4. 只有名字部分 (去除空格) - 针对 "Hisshi No" 变 "HisshiNo" 的极端情况
-            keys.add((fight_id, name.replace(" ", "")))
-            return keys
-
         for report in self.reports:
             for fight in report.fights:
-                for p in fight.players:
-                    # 为这个玩家生成所有“可能的身份ID”
-                    for k in generate_keys(fight.fight_id, p.name):
-                        official_dps_map[k] = p.total
+                # 只有列表里的第一个人是“主角”(Ranker)
+                if fight.players:
+                    p = fight.players[0]
+                    clean_name = SpecRanking._normalize_name(p.name)
+                    key = (fight.fight_id, clean_name)
+                    official_dps_map[key] = p.total
         # ============================================================
 
-        # 2. 应用数量限制
+        # 2. Apply Limit
         limit = limit or -1
         self.reports = self.reports[:limit]
 
-        # 3. 补全阵容
+        # 3. Fetch Details
         fights_missing_comp = [f for f in self.fights if len(f.players) <= 1]
+        
         if fights_missing_comp:
             logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights...")
             await self.load_many(fights_missing_comp, raise_errors=False)
 
-        # 4. 加载技能数据 (DPS 变异的高发区)
-        await self.load_actors()
-        
-        # ============================================================
-        # [Final Fix v4] 最终一致性检查 (带深度调试)
-        # ============================================================
-        restore_count_final = 0
-        for report in self.reports:
-            for fight in report.fights:
-                for player in fight.players:
-                    
-                    # 尝试用所有可能的变体去匹配
-                    potential_keys = generate_keys(fight.fight_id, player.name)
-                    official_val = None
-                    
-                    for k in potential_keys:
-                        if k in official_dps_map:
-                            official_val = official_dps_map[k]
-                            break
-                    
-                    # === 深度调试: 专门针对顽固分子 ===
-                    # 如果是我们要找的人，但没找到 official_val，或者找到了但没修
-                    target_names = ["日向", "引力", "日向正宗", "引力同频"]
-                    is_target = any(t in player.name for t in target_names)
-                    
-                    if is_target:
-                        if official_val is None:
-                            # 打印出“为什么找不到”：列出该 FightID 下所有的可用 Key
-                            available_keys = [k[1] for k in official_dps_map.keys() if k[0] == fight.fight_id]
-                            logger.error(f"[DEBUG-FAIL] Could not find Official DPS for target: {player.name} (FightID: {fight.fight_id})")
-                            logger.error(f"             Tried Keys: {potential_keys}")
-                            logger.error(f"             Available Keys in Map for this Fight: {available_keys}")
-                        else:
-                            # 找到了，打印对比
-                            logger.warning(f"[DEBUG-CHECK] Target {player.name}: Local={player.total} vs Official={official_val}")
+            # ============================================================
+            # [NEW] "Highlander" Rule: There can be only one.
+            # ============================================================
+            restore_count = 0
+            censor_count = 0
+            
+            for fight in self.fights:
+                if not fight.players:
+                    continue
+                
+                # 1. 认领主角 (First player is ALWAYS the Ranker)
+                ranker = fight.players[0]
+                
+                # 2. 修复主角数据
+                clean_name = SpecRanking._normalize_name(ranker.name)
+                key = (fight.fight_id, clean_name)
+                official_val = official_dps_map.get(key)
+                
+                if official_val is not None and abs(ranker.total - official_val) > 1.0:
+                    ranker.total = official_val
+                    restore_count += 1
+                
+                # 3. 封杀配角 (Censor Teammates)
+                # 遍历除了主角以外的所有队友
+                for teammate in fight.players[1:]:
+                    # 如果队友也是同职业 (比如队伍里有两个黑骑)
+                    if teammate.spec_slug == self.spec_slug:
+                        # 直接把这个"克隆人/队友"的伤害归零，防止他在别人的榜单里篡位
+                        if teammate.total > 0:
+                            teammate.total = 0
+                            censor_count += 1
 
-                    # 执行修复
-                    if official_val is not None:
-                        # 只要有偏差 (>1.0) 就强制覆盖
-                        if abs(player.total - official_val) > 1.0: 
-                            logger.info(f"[DPS Final Fix] Correction for {player.name}: Local={player.total} -> Official={official_val}")
-                            player.total = official_val
-                            restore_count_final += 1
-        
-        if restore_count_final > 0:
-            logger.info(f"[DPS Final Fix] Corrected DPS for {restore_count_final} players to match Leaderboard.")
-        # ============================================================
+            logger.info(f"[DPS Fix] Restored {restore_count} Rankers | Censored {censor_count} Impostors (Teammates).")
+            # ============================================================
+
+        # 4. Load Spells
+        await self.load_actors()
         
         logger.info("done")
 
