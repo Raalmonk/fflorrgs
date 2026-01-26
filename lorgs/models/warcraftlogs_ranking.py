@@ -354,66 +354,71 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         if clear_old:
             self.reports = []
 
-        # 1. 加载排行榜 (此时拥有官方准确的 rDPS)
+        # 1. 加载排行榜
         await self.load_rankings()
         self.reports = self.sort_reports(self.reports)
 
         # ============================================================
-        # [NEW] 快照：保存官方排行榜中的准确数值
+        # [快照 v3] 使用 (FightID, ShortName) 作为唯一键
+        # 解决对象被重建导致 ID 变化的问题，同时也解决名字带服务器后缀的问题
         # ============================================================
         official_dps_map = {}
+        
+        def get_lookup_key(fight_id, name):
+            # 将 "PlayerName-ServerName" 简化为 "PlayerName" 以便匹配
+            simple_name = name.split("-")[0] if "-" in name else name
+            return (fight_id, simple_name)
+
         for report in self.reports:
             for fight in report.fights:
                 for p in fight.players:
-                    # 建立指纹: (FightID, PlayerName) -> rDPS
-                    official_dps_map[(fight.fight_id, p.name)] = p.total
+                    key = get_lookup_key(fight.fight_id, p.name)
+                    official_dps_map[key] = p.total
         # ============================================================
 
         # 2. 应用数量限制
         limit = limit or -1
         self.reports = self.reports[:limit]
 
-        # 3. 检查并补全阵容
+        # 3. 补全阵容 (这步可能会重建 Player 对象)
         fights_missing_comp = [f for f in self.fights if len(f.players) <= 1]
-        
         if fights_missing_comp:
             logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights...")
-            
-            # 这一步可能会导致 Report 内部重建 Fight 对象，导致 fights_missing_comp 里的引用失效
             await self.load_many(fights_missing_comp, raise_errors=False)
 
-            # ============================================================
-            # [NEW] 还原 (Bug修复版)：
-            # 必须重新通过 self.fights 获取最新的对象引用，而不是遍历 fights_missing_comp
-            # ============================================================
-            restore_count = 0
-            
-            # 直接遍历当前所有存活的战斗对象
-            for fight in self.fights:
-                for player in fight.players:
-                    # 查找这个玩家是否有“官方金标准”数据
-                    key = (fight.fight_id, player.name)
-                    
-                    if key in official_dps_map:
-                        official_val = official_dps_map[key]
-                        
-                        # 如果当前值 (可能被 Summary 覆盖了) 不等于 官方值
-                        if player.total != official_val:
-                            # 强行覆盖回官方值
-                            # logger.info(f"[DPS Fix] Restoring {player.name}: {player.total} -> {official_val}")
-                            player.total = official_val
-                            restore_count += 1
-            
-            if restore_count > 0:
-                logger.info(f"[DPS Fix] Successfully restored {restore_count} players to Ranking DPS.")
-            # ============================================================
-
-        # 4. 加载技能数据
+        # 4. 加载技能数据 (这步会重新计算 DPS)
         await self.load_actors()
+        
+        # ============================================================
+        # [Final Fix v3] 最终一致性检查
+        # 无论对象是否重建，无论名字是否多了后缀，只要是同一个人，强制还原 DPS
+        # ============================================================
+        restore_count_final = 0
+        for report in self.reports:
+            for fight in report.fights:
+                for player in fight.players:
+                    # 使用相同的逻辑生成 Key
+                    key = get_lookup_key(fight.fight_id, player.name)
+                    official_val = official_dps_map.get(key)
+                    
+                    if official_val is not None:
+                        # 只要有偏差 (>1.0) 就强制覆盖
+                        if abs(player.total - official_val) > 1.0: 
+                            # 可选：如果是重点关注的对象，打印出来
+                            if "日向" in player.name or "丛雲" in player.name:
+                                logger.warning(f"[DPS Final Fix] TARGET FOUND {player.name}: {player.total} -> {official_val}")
+                            else:
+                                logger.info(f"[DPS Final Fix] Correction for {player.name}: Local={player.total} -> Official={official_val}")
+                            
+                            player.total = official_val
+                            restore_count_final += 1
+        
+        if restore_count_final > 0:
+            logger.info(f"[DPS Final Fix] Corrected DPS for {restore_count_final} players to match Leaderboard.")
+        # ============================================================
         
         logger.info("done")
 
-        # 更新时间戳
         self.updated = datetime.datetime.now(datetime.timezone.utc)
         self.dirty = False
 
