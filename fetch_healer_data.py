@@ -106,10 +106,14 @@ async def fetch_fight_summary(session, token, report_id, fight_id):
         return {}
 
 async def fetch_events(session, token, report_id, fight_id, start_time, end_time, source_ids):
-    # Fetch all casts for the fight and filter in Python to avoid empty list issues with API filtering.
+    # 构造过滤器：只请求特定的玩家 ID
+    # 语法示例: "source.id = 15 OR source.id = 16"
+    filter_expr = " OR ".join([f"source.id = {sid}" for sid in source_ids])
+    
+    print(f"  > Filtering events for Source IDs: {source_ids}...") # 调试打印
 
     query = """
-    query($reportID: String!, $fightID: Int!, $startTime: Float!, $endTime: Float!) {
+    query($reportID: String!, $fightID: Int!, $startTime: Float!, $endTime: Float!, $filter: String) {
         reportData {
             report(code: $reportID) {
                 events(
@@ -117,6 +121,7 @@ async def fetch_events(session, token, report_id, fight_id, start_time, end_time
                     dataType: Casts,
                     startTime: $startTime,
                     endTime: $endTime,
+                    filterExpression: $filter,  # 这里加上过滤器
                     limit: 10000
                 ) {
                     data
@@ -130,24 +135,23 @@ async def fetch_events(session, token, report_id, fight_id, start_time, end_time
         "reportID": report_id,
         "fightID": fight_id,
         "startTime": start_time,
-        "endTime": end_time
+        "endTime": end_time,
+        "filter": filter_expr # 传入构造好的过滤器字符串
     }
-
+    
     data = await query_graphql(session, token, query, variables)
-
+    
     if not data or "errors" in data:
         print(f"Error fetching events: {data}")
         return []
 
     try:
         events = data["data"]["reportData"]["report"]["events"]["data"]
-        # Handle pagination if necessary, but user didn't explicitly ask for full pagination logic, just "Fetch the timeline events".
-        # 10000 limit should be enough for casts in a single fight for 2 players.
         return events
     except (KeyError, TypeError) as e:
         print(f"Error parsing events: {e}")
         return []
-
+    
 async def main():
     async with aiohttp.ClientSession() as session:
         token = await get_token(session)
