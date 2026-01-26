@@ -14,7 +14,7 @@ from lorgs.clients import discord
 from lorgs.models.user import User
 
 
-SECRET_KEY = os.getenv("SECRET_KEY") or "my-super-secret-key"
+SECRET_KEY = os.getenv("SECRET_KEY")
 REDIRECT_URI = os.getenv("REDIRECT_URI") or "https://lorrgs.io/login"
 
 

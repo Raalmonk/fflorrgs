@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 import dotenv
 
@@ -40,28 +41,28 @@ async def test_get_user_profile():
 
 
 async def test_get_user_info():
-    user_id = "392483139991240714"  # thats me!
+    user_id = os.getenv("DISCORD_USER_ID")
     user_info = await discord.get_user_info(user_id)
     print(user_info)
 
 
 async def test_get_member_info():
-    user_id = "392483139991240714"  # thats me!
-    server_id = "885638678607708172"
+    user_id = os.getenv("DISCORD_USER_ID")
+    server_id = os.getenv("DISCORD_SERVER_ID")
     member_info = await discord.get_member_info(server_id, user_id)
     print(member_info)
 
 
 async def test_get_member_info_with_invalid_id():
     user_id = "123123123"
-    server_id = "885638678607708172"
+    server_id = os.getenv("DISCORD_SERVER_ID")
     member_info = await discord.get_member_info(server_id, user_id)
     print(member_info)
 
 
 async def test_get_member_info_user_who_is_not_in_lorrgs():
-    user_id = "775774321318297630"  # my test bot account
-    server_id = "885638678607708172"
+    user_id = os.getenv("DISCORD_BOT_USER_ID")
+    server_id = os.getenv("DISCORD_SERVER_ID")
     member_info = await discord.get_member_info(server_id, user_id)
     print(member_info)
 
@@ -72,14 +73,14 @@ async def test_get_member_info_user_who_is_not_in_lorrgs():
 
 
 async def test_get_member_roles():
-    user_id = "392483139991240714"  # thats me!
+    user_id = os.getenv("DISCORD_USER_ID")
     roles = await auth.get_member_roles(user_id)
     print(roles)
 
 
 async def test_get_member_permissions():
-    user_id = "392483139991240714"  # thats me!
-    user_id = "1321313"  # thats me!
+    user_id = os.getenv("DISCORD_USER_ID")
+    # user_id = "1321313"
 
     member_info = await auth.get_member_permissions(user_id)
     print(member_info)

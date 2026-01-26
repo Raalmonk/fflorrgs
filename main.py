@@ -1,6 +1,9 @@
 # main.py
 import uvicorn
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # 1. 将环境变量设置移至全局作用域
 # 这样可以确保 uvicorn 在 reload 重新加载模块时，这些变量依然生效，
@@ -8,10 +11,6 @@ import os
 os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
 os.environ["AWS_ACCESS_KEY_ID"] = "testing"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
-
-# WCL 客户端 ID 和 Secret
-os.environ["WCL_CLIENT_ID"] = "a0e16bba-fba8-432d-a317-4a6a83d98728"
-os.environ["WCL_CLIENT_SECRET"] = "Rowpl4stVguifS4YJbzow1HCjh1g2uNuGNaFYRPk"
 
 from lorrgs_api.app import create_app  #
 
