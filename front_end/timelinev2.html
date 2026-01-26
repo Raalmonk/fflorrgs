@@ -84,7 +84,7 @@
         });
 
         // 1. fetchSpellData (API)
-const fetchSpellData = async (specSlug = 'redmage-redmage') => {
+        const fetchSpellData = async (specSlug = 'redmage-redmage') => {
             try {
                 const url = `./data/spells_${specSlug}.json?t=${Date.now()}`;
                 console.log(`[M-Spec] 加载技能配置: ${url}`);
@@ -188,116 +188,125 @@ const fetchSpellData = async (specSlug = 'redmage-redmage') => {
         };
 
         // 2. fetchRankings (API with Region & Partner Logic)
-        // --- 替换开始 ---
-const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = []) => {
-    console.log('[M-Spec] 正在读取静态文件:', specSlug, bossSlug);
+        // --- UPDATED to support Region Filtering ---
+        const fetchRankings = async (specSlug, bossSlug, spellMap, regionFilter = 'All') => {
+            console.log('[M-Spec] 正在读取静态文件:', specSlug, bossSlug, 'Region:', regionFilter);
 
-    // 定义团辅职业列表 (根据你的要求)
-    const BUFF_SPECS = new Set([
-        'astrologian-astrologian', 'scholar-scholar', // Healers
-        'dragoon-dragoon', 'reaper-reaper', 'monk-monk', 'ninja-ninja', // Melee
-        'dancer-dancer', 'bard-bard', // Phys Ranged
-        'redmage-redmage', 'summoner-summoner', 'pictomancer-pictomancer' // Magic Ranged
-    ]);
+            // 定义团辅职业列表 (根据你的要求)
+            const BUFF_SPECS = new Set([
+                'astrologian-astrologian', 'scholar-scholar', // Healers
+                'dragoon-dragoon', 'reaper-reaper', 'monk-monk', 'ninja-ninja', // Melee
+                'dancer-dancer', 'bard-bard', // Phys Ranged
+                'redmage-redmage', 'summoner-summoner', 'pictomancer-pictomancer' // Magic Ranged
+            ]);
 
-    try {
-        const fileName = `spec_ranking_${specSlug}_${bossSlug}.json`;
-        const url = `./data/${fileName}?t=${Date.now()}`;
+            try {
+                const fileName = `spec_ranking_${specSlug}_${bossSlug}.json`;
+                const url = `./data/${fileName}?t=${Date.now()}`;
 
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`文件未找到: ${url}`);
-        
-        const data = await res.json();
-        
-        const allPlayers = [];
-        if (data.reports) {
-            data.reports.forEach(report => {
-                if (report.fights) {
-                    report.fights.forEach(fight => {
-                        if (fight.players) {
-                            fight.players.forEach(player => {
-                                player.fightDuration = fight.duration;
-                                player.fightId = fight.fight_id;
-                                player.reportId = report.report_id;
-                                player.region = report.region;
-                                player.composition = fight.composition || [];
-                                allPlayers.push(player);
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`文件未找到: ${url}`);
+                
+                const data = await res.json();
+                
+                const allPlayers = [];
+                if (data.reports) {
+                    data.reports.forEach(report => {
+                        if (report.fights) {
+                            report.fights.forEach(fight => {
+                                if (fight.players) {
+                                    fight.players.forEach(player => {
+                                        player.fightDuration = fight.duration;
+                                        player.fightId = fight.fight_id;
+                                        player.reportId = report.report_id;
+                                        player.region = report.region;
+                                        player.composition = fight.composition || [];
+                                        allPlayers.push(player);
+                                    });
+                                }
                             });
                         }
                     });
                 }
-            });
-        }
 
-        allPlayers.sort((a, b) => b.total - a.total);
-        const rankedPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0).slice(0, 70);
-
-        const rankData = rankedPlayers.map((player, index) => {
-                const id = `${player.reportId}-${player.fightId}-${player.source_id}`;
+                // 1. FILTER: Apply Spec and Region filter BEFORE sorting/slicing
+                let filteredPlayers = allPlayers.filter(p => p.spec_slug === specSlug && p.total > 0);
                 
-                // 1. 计算团辅数量
-                const buffCount = (player.composition || []).filter(s => BUFF_SPECS.has(s)).length;
-
-                // 2. Partner 图标逻辑 (更新版)
-                let partnerIcon = null;
-                const myDetailedRole = getDetailedRole(specSlug);
-
-                if (player.composition && Array.isArray(player.composition)) {
-                    // 找出所有同职能的人 (比如所有近战)
-                    const roleMates = player.composition.filter(s => getDetailedRole(s) === myDetailedRole);
-
-                    // 默认逻辑：找一个不是我的人
-                    let partnerSpec = roleMates.find(s => s !== specSlug);
-
-                    // 特殊逻辑：如果是 Tank 或 Healer，且没找到别人(说明是同职业)，且同职能人数>=2
-                    if (['tank', 'healer'].includes(myDetailedRole)) {
-                        if (!partnerSpec && roleMates.length >= 2) {
-                            partnerSpec = specSlug; // 显示我自己(同职业堆叠)
-                        }
-                    }
-                    // 注意：DPS 保持默认逻辑，如果是双绝枪(T)，这里会显示绝枪；如果是双武僧(DPS)，这里partner为空(符合你的要求)
-
-                    if (partnerSpec) {
-                        const iconName = getIconForSpec(partnerSpec);
-                        if (iconName) {
-                            partnerIcon = `./images/classes/${iconName}`;
-                        }
-                    }
+                if (regionFilter && regionFilter !== 'All') {
+                    filteredPlayers = filteredPlayers.filter(p => p.region === regionFilter);
                 }
 
-                const durationSeconds = player.fightDuration / 1000;
-                const m = Math.floor(durationSeconds / 60);
-                const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
+                // 2. SORT: Descending DPS
+                filteredPlayers.sort((a, b) => b.total - a.total);
 
-                return {
-                rank: index + 1,
-                id: id,
-                name: player.name,
-                region: player.region || '??',
-                reportId: player.reportId,
-                fightId: player.fightId,
-                partner: partnerIcon,
-                buffCount: buffCount, // 新增字段
-                composition: player.composition,
-                dps: player.total,
-                killTime: `${m}:${s}`,
-                killTimeSeconds: durationSeconds,
-                casts: (player.casts || []).map(c => ({
-                    spellId: c.spell_id,
-                    timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
-                    duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
-                })),
-                deaths: player.deaths || []
-            };
-        });
-        return rankData;
+                // 3. SLICE: Take top 70
+                const rankedPlayers = filteredPlayers.slice(0, 70);
 
-    } catch (error) {
-        console.error('[M-Spec] 读取排名数据失败:', error);
-        return [];
-    }
-};
-// --- 替换结束 ---
+                const rankData = rankedPlayers.map((player, index) => {
+                        const id = `${player.reportId}-${player.fightId}-${player.source_id}`;
+                        
+                        // 1. 计算团辅数量
+                        const buffCount = (player.composition || []).filter(s => BUFF_SPECS.has(s)).length;
+
+                        // 2. Partner 图标逻辑 (更新版)
+                        let partnerIcon = null;
+                        const myDetailedRole = getDetailedRole(specSlug);
+
+                        if (player.composition && Array.isArray(player.composition)) {
+                            // 找出所有同职能的人 (比如所有近战)
+                            const roleMates = player.composition.filter(s => getDetailedRole(s) === myDetailedRole);
+
+                            // 默认逻辑：找一个不是我的人
+                            let partnerSpec = roleMates.find(s => s !== specSlug);
+
+                            // 特殊逻辑：如果是 Tank 或 Healer，且没找到别人(说明是同职业)，且同职能人数>=2
+                            if (['tank', 'healer'].includes(myDetailedRole)) {
+                                if (!partnerSpec && roleMates.length >= 2) {
+                                    partnerSpec = specSlug; // 显示我自己(同职业堆叠)
+                                }
+                            }
+                            // 注意：DPS 保持默认逻辑，如果是双绝枪(T)，这里会显示绝枪；如果是双武僧(DPS)，这里partner为空(符合你的要求)
+
+                            if (partnerSpec) {
+                                const iconName = getIconForSpec(partnerSpec);
+                                if (iconName) {
+                                    partnerIcon = `./images/classes/${iconName}`;
+                                }
+                            }
+                        }
+
+                        const durationSeconds = player.fightDuration / 1000;
+                        const m = Math.floor(durationSeconds / 60);
+                        const s = Math.floor(durationSeconds % 60).toString().padStart(2, '0');
+
+                        return {
+                        rank: index + 1,
+                        id: id,
+                        name: player.name,
+                        region: player.region || '??',
+                        reportId: player.reportId,
+                        fightId: player.fightId,
+                        partner: partnerIcon,
+                        buffCount: buffCount, // 新增字段
+                        composition: player.composition,
+                        dps: player.total,
+                        killTime: `${m}:${s}`,
+                        killTimeSeconds: durationSeconds,
+                        casts: (player.casts || []).map(c => ({
+                            spellId: c.spell_id,
+                            timestamp: c.ts ? c.ts / 1000 : (c.timestamp || 0),
+                            duration: c.duration || (spellMap[c.spell_id] ? spellMap[c.spell_id].duration : 0)
+                        })),
+                        deaths: player.deaths || []
+                    };
+                });
+                return rankData;
+
+            } catch (error) {
+                console.error('[M-Spec] 读取排名数据失败:', error);
+                return [];
+            }
+        };
 
         const parseTime = (timeStr) => {
             if (!timeStr) return 0;
@@ -357,7 +366,7 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                 return []; 
             }
         };
-// --- 替换结束 ---
+        
         const calculateCastTracks = (casts) => {
             if (!casts || casts.length === 0) return { tracks: [], maxTracks: 1 };
             // Sort by timestamp for proper overlap rendering
@@ -597,6 +606,10 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
             // 2. 修改这里：使用 getQueryParam 来设置初始值
             const [selectedBoss, setSelectedBoss] = useState(getQueryParam('boss', 'vamp-fatale'));
             const [selectedSpec, setSelectedSpec] = useState(getQueryParam('spec', 'redmage-redmage'));
+            
+            // NEW: Region Filter
+            const [selectedRegion, setSelectedRegion] = useState('All');
+
             const [activeFilterSpecs, setActiveFilterSpecs] = useState(new Set()); // New State
             
             const [spellCategories, setSpellCategories] = useState({});
@@ -645,7 +658,9 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                     const cats = await fetchSpellCategories();
                     const sps = await fetchSpellData(selectedSpec);
                     const mechs = await fetchBossMechanics(selectedBoss);
-                    const ranks = await fetchRankings(selectedSpec, selectedBoss, sps, rankData);
+                    
+                    // PASS selectedRegion here
+                    const ranks = await fetchRankings(selectedSpec, selectedBoss, sps, selectedRegion);
 
                     setSpellCategories(cats); setSpells(sps); setBossMechanics(mechs); setRankData(ranks);
                     
@@ -664,7 +679,7 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                     setLoading(false);
                 };
                 load();
-            }, [selectedBoss, selectedSpec]);
+            }, [selectedBoss, selectedSpec, selectedRegion]); // ADDED selectedRegion to dependency array
 
             const toggleSpell = (spellId) => {
                 const newSet = new Set(selectedSpells);
@@ -760,6 +775,19 @@ const fetchRankings = async (specSlug, bossSlug, spellMap, currentRankData = [])
                             <span className="text-gray-400 text-sm">Spec:</span>
                             <SpecSelector selectedSpec={selectedSpec} onChange={setSelectedSpec} />
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
+                            
+                            {/* NEW: Region Selector */}
+                            <span className="text-gray-400 text-sm">Region:</span>
+                            <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)} className="bg-black/30 border border-gray-700 text-white text-sm rounded px-2 py-1.5 focus:outline-none focus:border-[#00FF96] cursor-pointer">
+                                <option value="All">All</option>
+                                <option value="JP">JP</option>
+                                <option value="NA">NA</option>
+                                <option value="EU">EU</option>
+                                <option value="OC">OC</option>
+                                <option value="CN">CN</option>
+                            </select>
+                            <span className="w-px h-3 bg-gray-600 mx-2"></span>
+
                             <CompositionFilter activeFilterSpecs={activeFilterSpecs} onApply={setActiveFilterSpecs} />
                         </div>
                     </div>
