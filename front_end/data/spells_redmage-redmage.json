@@ -18,7 +18,7 @@
     "name": "Manafication",
     "icon": "Manafication.png",
     "cooldown": 110.0,
-    "duration": 15.0,
+    "duration": 30.0,
     "color": "#E87B7B",
     "load_order": 1,
     "show": true,
