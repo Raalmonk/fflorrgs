@@ -6,7 +6,10 @@ from __future__ import annotations
 import datetime
 import textwrap
 import typing
-from typing import Dict, Tuple
+from typing import Dict, Tuple, ClassVar
+
+# IMPORT THIRD PARTY LIBRARIES
+import pydantic  # [新增] 引入 pydantic 以使用 PrivateAttr
 
 # IMPORT LOCAL LIBRARIES
 from lorgs import utils
@@ -25,8 +28,8 @@ from lorgs.models.wow_spec import WowSpec
 # Map Difficulty Names to Integers used in WCL
 DIFFICULTY_IDS = {
     "normal": 100,
-    "heroic": 101,  # savage
-    "mythic": 101,  # savage
+    "heroic": 101,
+    "mythic": 101,
     "savage": 101,
     "extreme": 102,
     "ultimate": 103,
@@ -44,9 +47,9 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     updated: datetime.datetime = datetime.datetime.min
     dirty: bool = False
     
-    # [新增] 绝对真理缓存：直接存储从 WCL 榜单 API 获取的原始数值
-    # Key: (fight_id, player_name_simple) -> Value: correct_dps
-    official_dps_cache: Dict[Tuple[int, str], float] = {}
+    # [修复] 使用 PrivateAttr 防止该字段被序列化到 JSON 中
+    # 这一步解决了 "keys must be str... not tuple" 的报错
+    _official_dps_cache: Dict[Tuple[int, str], float] = pydantic.PrivateAttr(default_factory=dict)
 
     # Config
     key: typing.ClassVar[str] = "{spec_slug}/{boss_slug}__{difficulty}__{metric}"
@@ -204,38 +207,26 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         """Process the Ranking Results."""
         encounter_data = query_result.get("worldData", {}).get("encounter", {})
 
-        # 1. 获取 Global 数据 (移除切片限制，获取全部)
         global_data = encounter_data.get("global", {})
         global_rankings = wcl.CharacterRankings(**global_data).rankings 
 
-        # 2. 获取 CN 数据 (移除切片限制，获取全部)
         cn_data = encounter_data.get("cn", {})
         cn_rankings = wcl.CharacterRankings(**cn_data).rankings
 
-        # Merge
         rankings = global_rankings + cn_rankings
         
-        # ============================================================
-        # [ROOT CAUSE FIX] 在这一步直接建立真理缓存
-        # 我们不再依赖从 Report 对象反推，而是直接解析 API 的原始 JSON。
-        # 这里的数据是 100% 准确的排行榜数据。
-        # ============================================================
-        self.official_dps_cache = {}
+        # 填充私有缓存
+        self._official_dps_cache = {}
         
         def normalize_name(n):
-            # 去除服务器名后缀，统一格式
             return n.split("-")[0].strip() if "-" in n else n.strip()
 
         for r in rankings:
-            # 存储 (FightID, 简化名) -> 官方 DPS
-            # 这样无论 "引力同频" 还是 "引力同频-Server"，都能匹配到同一个准确值
             simple_key = (r.report.fightID, normalize_name(r.name))
-            self.official_dps_cache[simple_key] = r.amount
+            self._official_dps_cache[simple_key] = r.amount
             
-            # 为了防止重名误伤，也存一份完整名字的 Key
             raw_key = (r.report.fightID, r.name)
-            self.official_dps_cache[raw_key] = r.amount
-        # ============================================================
+            self._official_dps_cache[raw_key] = r.amount
 
         self.add_new_fights(rankings)
         self.post_init()
@@ -251,7 +242,6 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
     #
     async def load_actors(self) -> None:
         """Load the Casts for all missing fights."""
-        # 优化：只加载主角的 Casts
         actors_to_load = [p for p in self.players if p.spec_slug == self.spec_slug]
         for i, fight in enumerate(self.fights):
             if not fight.boss:
@@ -278,33 +268,22 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
 
         if clear_old:
             self.reports = []
-            self.official_dps_cache = {} # 清空旧缓存
+            self._official_dps_cache = {}
 
-        # 1. 加载排行榜
-        # 这一步会调用 process_query_result，填充 self.official_dps_cache
         await self.load_rankings()
-        
-        # 排序
         self.reports = self.sort_reports(self.reports)
 
-        # 2. 应用数量限制 (API 返回了 100 个，这里我们可能只取前 50 个)
         limit = limit or -1
         self.reports = self.reports[:limit]
 
-        # 3. 补全阵容 (处理 combatantInfo 缺失)
         fights_missing_comp = [f for f in self.fights if len(f.players) <= 1]
         if fights_missing_comp:
             logger.info(f"[Fallback] Fetching Composition for {len(fights_missing_comp)} fights...")
             await self.load_many(fights_missing_comp, raise_errors=False)
 
-        # 4. 加载技能数据 (Load Actors)
-        # 注意：这一步会根据 Combat Log 重新计算 total，这通常是造成错误的根源
         await self.load_actors()
         
-        # ============================================================
-        # [Final Step: 绝对真理覆盖]
-        # 不管前面算出了什么，最后全部强制刷成官方数据。
-        # ============================================================
+        # [Final Fix] 使用私有缓存进行覆盖
         def normalize_name(n):
             return n.split("-")[0].strip() if "-" in n else n.strip()
 
@@ -312,26 +291,21 @@ class SpecRanking(S3Model, warcraftlogs_base.wclclient_mixin):
         for report in self.reports:
             for fight in report.fights:
                 for player in fight.players:
-                    # 尝试用 (FightID, 名字) 去查“真理表”
                     key_simple = (fight.fight_id, normalize_name(player.name))
                     key_raw = (fight.fight_id, player.name)
                     
-                    # 只要能在官方榜单里找到这个人，就用官方数据
-                    official_val = self.official_dps_cache.get(key_simple) or self.official_dps_cache.get(key_raw)
+                    # 读取私有变量
+                    official_val = self._official_dps_cache.get(key_simple) or self._official_dps_cache.get(key_raw)
                     
                     if official_val is not None:
-                        # 只要数值有一丁点不一样，就覆盖
                         if abs(player.total - official_val) > 0.1: 
                             player.total = official_val
                             restore_count_final += 1
-                            
-                            # (可选) 打印我们关心的那个 ID，确认它被修好了
                             if "引力" in player.name or "偷心" in player.name:
                                 logger.info(f"[DPS Final Fix] RESTORING {player.name}: {player.total} -> {official_val}")
         
         if restore_count_final > 0:
             logger.info(f"[DPS Final Fix] Corrected DPS for {restore_count_final} players to strictly match Leaderboard.")
-        # ============================================================
         
         logger.info("done")
         self.updated = datetime.datetime.now(datetime.timezone.utc)
