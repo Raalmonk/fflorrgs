@@ -603,8 +603,8 @@
             const [zoom, setZoom] = useState(15);
             const [isCollapsed, setIsCollapsed] = useState(true); // Default to Collapsed
             
-            // NEW: Highlighted Row State
-            const [selectedRowId, setSelectedRowId] = useState(null);
+            // NEW: Highlighted Row State (MULTI-SELECT)
+            const [selectedRowIds, setSelectedRowIds] = useState(new Set());
 
             // 2. 修改这里：使用 getQueryParam 来设置初始值
             const [selectedBoss, setSelectedBoss] = useState(getQueryParam('boss', 'vamp-fatale'));
@@ -761,6 +761,20 @@
                 };
             }, [onMouseMove, onMouseUp]);
 
+            // --- NEW: URL UPDATE HELPER ---
+            const updateUrlAndReload = (key, value) => {
+                const url = new URL(window.location);
+                url.searchParams.set(key, value);
+                // Also ensure we keep the OTHER param
+                if (key === 'boss') {
+                    url.searchParams.set('spec', selectedSpec);
+                } else if (key === 'spec') {
+                    url.searchParams.set('boss', selectedBoss);
+                }
+                
+                window.location.href = url.toString();
+            };
+
 
             if (loading) return <div className="h-screen bg-[#121212] flex items-center justify-center text-[#00FF96]">Loading...</div>;
 
@@ -778,7 +792,12 @@
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="text-gray-400 text-sm">Boss:</span>
-                            <select value={selectedBoss} onChange={(e) => setSelectedBoss(e.target.value)} className="bg-black/30 border border-gray-700 text-white text-sm rounded px-2 py-1.5 focus:outline-none focus:border-[#00FF96] cursor-pointer">
+                            {/* UPDATED: onChange now triggers URL update */}
+                            <select 
+                                value={selectedBoss} 
+                                onChange={(e) => updateUrlAndReload('boss', e.target.value)} 
+                                className="bg-black/30 border border-gray-700 text-white text-sm rounded px-2 py-1.5 focus:outline-none focus:border-[#00FF96] cursor-pointer"
+                            >
                                 <option value="vamp-fatale">M9S: Vamp Fatale</option>
                                 <option value="red-hot-and-deep-blue">M10S: Red Hot and Deep Blue</option>
                                 <option value="the-tyrant">M11S: The Tyrant</option>
@@ -787,7 +806,11 @@
                             </select>
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             <span className="text-gray-400 text-sm">Spec:</span>
-                            <SpecSelector selectedSpec={selectedSpec} onChange={setSelectedSpec} />
+                            {/* UPDATED: onChange now triggers URL update */}
+                            <SpecSelector 
+                                selectedSpec={selectedSpec} 
+                                onChange={(id) => updateUrlAndReload('spec', id)} 
+                            />
                             <span className="w-px h-3 bg-gray-600 mx-2"></span>
                             
                             {/* NEW: Region Selector */}
@@ -986,14 +1009,22 @@
                                 const trackHeight = 30; // Height per sub-row when expanded
                                 const totalHeight = isCollapsed ? rowHeight : Math.max(rowHeight, maxTracks * trackHeight);
                                 
-                                // FEATURE 2: Check if this row is selected
-                                const isSelected = selectedRowId === row.id;
+                                // FEATURE 2: Check if this row is selected (MULTI-SELECT SUPPORT)
+                                const isSelected = selectedRowIds.has(row.id);
 
                                 return (
                                     <div 
                                         key={row.id} 
-                                        // FEATURE 2: Row Click & Highlight Logic
-                                        onClick={() => setSelectedRowId(isSelected ? null : row.id)}
+                                        // FEATURE 2: Row Click & Highlight Logic (MULTI-SELECT)
+                                        onClick={() => {
+                                            const newSet = new Set(selectedRowIds);
+                                            if (newSet.has(row.id)) {
+                                                newSet.delete(row.id);
+                                            } else {
+                                                newSet.add(row.id);
+                                            }
+                                            setSelectedRowIds(newSet);
+                                        }}
                                         className={`flex hover:bg-[#1a1a1a] transition-colors group relative border-b border-gray-800/40 ${
                                             isSelected 
                                             ? 'bg-[#00FF96]/5 z-10' // Removed border changes to prevent layout shift
