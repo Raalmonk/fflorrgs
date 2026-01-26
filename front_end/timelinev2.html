@@ -994,13 +994,18 @@
                                         key={row.id} 
                                         // FEATURE 2: Row Click & Highlight Logic
                                         onClick={() => setSelectedRowId(isSelected ? null : row.id)}
-                                        className={`flex hover:bg-[#1a1a1a] transition-colors group relative ${
+                                        className={`flex hover:bg-[#1a1a1a] transition-colors group relative border-b border-gray-800/40 ${
                                             isSelected 
-                                            ? 'bg-[#00FF96]/5 border-t-[2px] border-b-[2px] border-[#00FF96] z-10' // High z-index to show borders over neighbors
-                                            : 'border-b border-gray-800/40'
+                                            ? 'bg-[#00FF96]/5 z-10' // Removed border changes to prevent layout shift
+                                            : ''
                                         }`} 
                                         style={{ height: `${totalHeight}px` }}
                                     >
+                                        {/* Selection Highlight Overlay - Absolute positioned to avoid layout shift */}
+                                        {isSelected && (
+                                            <div className="absolute inset-0 border-t-2 border-b-2 border-[#00FF96] pointer-events-none z-[60]"></div>
+                                        )}
+
                                         {/* Sticky Left Panel - Adjusted for Compact Height */}
                                         <div className="sticky left-0 bg-[#161616] group-hover:bg-[#1e1e1e] border-r border-gray-800 shrink-0 flex items-center px-4 z-40 transition-colors shadow-[4px_0_5px_rgba(0,0,0,0.2)]" style={{ width: `${LEFT_PANEL_WIDTH}px` }}>
                                             <div className="w-8 text-center mr-2 font-mono text-gray-500 text-xs">#{row.rank}</div>
