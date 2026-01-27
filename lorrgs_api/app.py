@@ -31,6 +31,12 @@ def create_app() -> fastapi.FastAPI:
 
     app.include_router(api.router, prefix="/api")
     app.include_router(views.router)
+
+    app.mount("/images", StaticFiles(directory="front_end/images"), name="images")
+    
+    # 同样挂载数据文件夹
+    app.mount("/data", StaticFiles(directory="front_end/data"), name="data")
+    
     app.mount("/lorrgs_assets", StaticFiles(directory="lorrgs_assets"), name="assets")
 
     cors_middleware.init(app)
