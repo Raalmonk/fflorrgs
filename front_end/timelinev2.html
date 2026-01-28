@@ -760,11 +760,11 @@
             const scrollContainerRef = useRef(null);
 
             // NEW: Helper to toggle all spells
+            // UPDATED Logic: If ANY spell is selected, hide all. Only if NONE are selected, show all.
             const toggleAllSpells = () => {
                 const allSpellIds = Object.values(spells).map(s => s.id);
-                const isAllSelected = allSpellIds.length > 0 && allSpellIds.every(id => selectedSpells.has(id));
                 
-                if (isAllSelected) {
+                if (selectedSpells.size > 0) {
                     setSelectedSpells(new Set());
                 } else {
                     setSelectedSpells(new Set(allSpellIds));
@@ -772,7 +772,8 @@
             };
 
             // Calculated state for the button appearance
-            const isAllSpellsSelected = Object.values(spells).length > 0 && Object.values(spells).every(s => selectedSpells.has(s.id));
+            // UPDATED: Now reflects if "Any" spell is selected, rather than "All"
+            const hasAnySpellSelected = selectedSpells.size > 0;
 
             // consistent spell coloring
             const spellColorMap = useMemo(() => {
@@ -1030,11 +1031,11 @@
                         {/* MOVED: Display Controls to the far right */}
                         <div className="flex items-center gap-1">
                             <button 
-                                title={isAllSpellsSelected ? "Hide All Spells" : "Show All Spells"} 
+                                title={hasAnySpellSelected ? "Hide All Spells" : "Show All Spells"} 
                                 onClick={toggleAllSpells} 
-                                className={`w-8 h-7 flex items-center justify-center text-sm rounded border transition-colors ${isAllSpellsSelected ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-400 hover:text-gray-200 hover:border-gray-500'}`}
+                                className={`w-8 h-7 flex items-center justify-center text-sm rounded border transition-colors ${hasAnySpellSelected ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-400 hover:text-gray-200 hover:border-gray-500'}`}
                             >
-                                {isAllSpellsSelected ? <Eye size={16} /> : <EyeOff size={16} />}
+                                {hasAnySpellSelected ? <Eye size={16} /> : <EyeOff size={16} />}
                             </button>
 
                             <button title="Toggle Duration Bars" onClick={() => setShowDuration(!showDuration)} className={`w-8 h-7 flex items-center justify-center text-sm rounded border transition-colors ${showDuration ? 'bg-[#00FF96]/10 border-[#00FF96] text-[#00FF96]' : 'border-gray-700 text-gray-500 hover:text-gray-200 hover:border-gray-500'}`}>⏳</button>
