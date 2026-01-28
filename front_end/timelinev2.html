@@ -689,6 +689,9 @@
             
             // NEW: Highlighted Row State (MULTI-SELECT)
             const [selectedRowIds, setSelectedRowIds] = useState(new Set());
+            // NEW: Separated Curated List State
+            const [curatedRowIds, setCuratedRowIds] = useState(new Set());
+
             // NEW FEATURE: Curation Mode States
             const [isSelectionMode, setIsSelectionMode] = useState(false);
             const [isCurated, setIsCurated] = useState(false);
@@ -849,6 +852,13 @@
                     alert("Please select at least one row.");
                     return;
                 }
+                
+                // 1. Move current selection to curated list (Visibility)
+                setCuratedRowIds(new Set(selectedRowIds));
+                
+                // 2. Clear current selection (Highlight Border) - This fixes your issue!
+                setSelectedRowIds(new Set());
+                
                 setIsCurated(true);
                 setIsSelectionMode(false);
             };
@@ -857,7 +867,9 @@
             const handleExitCuration = () => {
                 setIsCurated(false);
                 setIsSelectionMode(false);
-                // Optional: Clear selection on exit, or keep it? Keeping it is usually better UX
+                setCuratedRowIds(new Set()); // Clear curated list on exit
+                // Note: We might want to clear selectedRowIds (Green lines) too, or keep them. 
+                // Let's clear them to be clean.
                 // setSelectedRowIds(new Set()); 
             };
 
@@ -960,7 +972,7 @@
                                         title="Exit Curated Mode"
                                     >
                                         <CheckCircle2 size={14} className="text-[#3B82F6]" />
-                                        <span>Curated ({selectedRowIds.size})</span>
+                                        <span>Curated ({curatedRowIds.size})</span>
                                         <XCircle size={14} className="ml-1 opacity-50 hover:opacity-100" />
                                     </button>
                                 </div>
@@ -1138,8 +1150,8 @@
                                     if (row.killTimeSeconds < killTimeRange.min) return false;
                                     if (row.killTimeSeconds > killTimeRange.max) return false;
 
-                                    // 3. CURATION FILTER (New)
-                                    if (isCurated && !selectedRowIds.has(row.id)) return false;
+                                    // 3. CURATION FILTER (New Logic: check curatedRowIds instead of selectedRowIds)
+                                    if (isCurated && !curatedRowIds.has(row.id)) return false;
 
                                     return true;
                                 })
